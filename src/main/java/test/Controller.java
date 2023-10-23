@@ -1,4 +1,5 @@
 package test;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -18,18 +19,18 @@ import java.lang.IllegalArgumentException;
  */
 public class Controller {
     /**
-     * This is a button for adding movie at list
+     *This is a button for adding movie at list
      */
     @FXML
     private Button addMovieButton;
     /**
-     * This is a button for name of a movie
-     */
+    * This is a button for name of a movie
+    */
     @FXML
     private TextField movieNameField;
     /**
-     * This is a button for movie choice
-     */
+    *This is a button for movie choice
+    * */
     @FXML
     private ComboBox<?> movieChoiceButton;
     /**
@@ -48,12 +49,12 @@ public class Controller {
     @FXML
     private Button saveExitButton;
     /**
-     * This is a button for searching movie by name
+     *This is a button for searching movie by name
      */
     @FXML
     private Button searchMovieButton;
     /**
-     * This is image for searching button
+     *This is image for searching button
      */
     @FXML
     private ImageView searchPng;
@@ -62,16 +63,16 @@ public class Controller {
      * Prints text to the console when a button is pressed
      */
     @FXML
-    public void initialize() {
-        searchMovieButton.setOnAction(event -> searchMovieBut());
-        addMovieButton.setOnAction(actionEvent -> addMovieBut());
-        movieListButton.setOnAction(actionEvent -> movieListBut());
-        removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
-        saveExitButton.setOnAction(actionEvent -> saveExitBut());
+    public void initialize(){
+    searchMovieButton.setOnAction(event -> searchMovieBut());
+    addMovieButton.setOnAction(actionEvent -> addMovieBut());
+    movieListButton.setOnAction(actionEvent -> movieListBut());
+    removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
+    saveExitButton.setOnAction(actionEvent -> saveExitBut());
 
     }
 
-    private void addMovieBut() {
+    private void addMovieBut(){
         System.out.println("Adding button..");
         final String[] movieName = new String[1];
         final String[] year = new String[1];
@@ -96,7 +97,7 @@ public class Controller {
         Label genreLabel = new Label("Genre:");
         TextField genreTextField = new TextField();
 
-        Label placeLabel = new Label("Director:");
+        Label placeLabel = new Label("Place in chart:");
         TextField placeTextField = new TextField();
         Button okButton = new Button("OK");
 
@@ -113,7 +114,7 @@ public class Controller {
         gridPane.add(placeLabel, 0, 3);
         gridPane.add(placeTextField, 1, 3);
 
-        gridPane.add(okButton, 1, 4);
+        gridPane.add(okButton,1,4);
 
         okButton.setOnAction(event -> {
             try {
@@ -121,19 +122,19 @@ public class Controller {
                 year[0] = validateInput(yearTextField.getText(), "Year of Creation");
                 genre[0] = validateInput(genreTextField.getText(), "Genre");
                 director[0] = validateInput(placeTextField.getText(), "Director");
-                int a = Integer.parseInt(year[0]);
                 newStage.close();
-            } catch (NumberFormatException nfe) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Wrong number format");
-                alert.setHeaderText(null);
-                alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
-                alert.showAndWait();
+                int a = Integer.parseInt(year[0]);
             } catch (IllegalArgumentException iae) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Input error");
                 alert.setHeaderText(null);
                 alert.setContentText(iae.getMessage());
+                alert.showAndWait();
+            } catch (NumberFormatException nfe) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Wrong number format");
+                alert.setHeaderText(null);
+                alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
                 alert.showAndWait();
             }
         });
@@ -144,29 +145,27 @@ public class Controller {
     }
 
 
-    private void movieListBut() {
+    private void movieListBut(){
         System.out.println("Movie list button..");
     }
 
-    private void removeMovieBut() {
+    private void removeMovieBut(){
         System.out.println("Remove movie button");
     }
 
-    private void saveExitBut() {
+    private void saveExitBut (){
         System.out.println("Save and exit button");
     }
 
-    private void searchMovieBut() {
+    private void searchMovieBut(){
         System.out.println("Search movie button..");
     }
 
     public static class IllegalArgumentException extends Exception {
-
         public IllegalArgumentException(String message) {
             super(message);
         }
     }
-
     private String validateInput(String input, String fieldName) throws IllegalArgumentException {
         if (input.isEmpty()) {
             throw new IllegalArgumentException("Field " + fieldName + " is empty. Try again.");
@@ -174,3 +173,4 @@ public class Controller {
         return input;
     }
 }
+
