@@ -97,7 +97,7 @@ public class Controller {
         Label genreLabel = new Label("Genre:");
         TextField genreTextField = new TextField();
 
-        Label placeLabel = new Label("Place in chart:");
+        Label placeLabel = new Label("Director:");
         TextField placeTextField = new TextField();
         Button okButton = new Button("OK");
 
@@ -122,19 +122,19 @@ public class Controller {
                 year[0] = validateInput(yearTextField.getText(), "Year of Creation");
                 genre[0] = validateInput(genreTextField.getText(), "Genre");
                 director[0] = validateInput(placeTextField.getText(), "Director");
-                newStage.close();
                 int a = Integer.parseInt(year[0]);
-            } catch (IllegalArgumentException iae) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Input error");
-                alert.setHeaderText(null);
-                alert.setContentText(iae.getMessage());
-                alert.showAndWait();
+                newStage.close();
             } catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong number format");
                 alert.setHeaderText(null);
                 alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
+                alert.showAndWait();
+            }catch (IllegalArgumentException iae) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Input error");
+                alert.setHeaderText(null);
+                alert.setContentText(iae.getMessage());
                 alert.showAndWait();
             }
         });
@@ -162,6 +162,7 @@ public class Controller {
     }
 
     public static class IllegalArgumentException extends Exception {
+
         public IllegalArgumentException(String message) {
             super(message);
         }
