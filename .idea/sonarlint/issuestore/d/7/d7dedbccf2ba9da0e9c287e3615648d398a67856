@@ -1,0 +1,12 @@
+
+r	java:S1173"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÊĞ®¼ÿÿÿÿÿ8Í•µ1
+X
+java:S2696$"6Make the enclosing method "static" or remove this set.(¤ÿˆúÿÿÿÿ8Ö•µ1
+S
+java:S2696%"6Make the enclosing method "static" or remove this set.(­ò¤§8Ö•µ1
+X
+java:S2696&"6Make the enclosing method "static" or remove this set.(ŠÅ›£øÿÿÿÿ8×•µ1
+S
+java:S2696-"6Make the enclosing method "static" or remove this set.(¬ÃŒ³8×•µ1
+o	java:S1000"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù“Ãûÿÿÿÿ8×•µ1
+o	java:S1003"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÊĞ®¼ÿÿÿÿÿ8Ø•µ1

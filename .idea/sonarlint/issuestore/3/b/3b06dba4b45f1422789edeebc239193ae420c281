@@ -1,0 +1,15 @@
+
+z	java:S116
+"YRename this field "list_of_movies" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤¨øİşÿÿÿÿ8´ˆêµ1
+u	java:S116"ZRename this field "list_of_Session" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬Ã×w8´ˆêµ1
+£
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ì¤Ïıøÿÿÿÿ8µˆêµ1
+j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÿí›€8Äˆêµ1
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ì¤Ïıøÿÿÿÿ8Æˆêµ1
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(âáÒ¤ûÿÿÿÿ8Çˆêµ1
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’˜«œûÿÿÿÿ8Çˆêµ1
+j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÊœÑÇ8Èˆêµ1
+V
+java:S1128"4Remove this unused import 'java.security.PublicKey'.(ºâú½üÿÿÿÿ8Êˆêµ1
+T
+java:S1128"2Remove this unused import 'java.util.Collections'.(¢³ïÓşÿÿÿÿ8Êˆêµ1
