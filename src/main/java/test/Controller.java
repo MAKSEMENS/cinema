@@ -8,15 +8,29 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -64,6 +78,10 @@ public class Controller {
      */
     @FXML
     private ImageView searchPng;
+    @FXML
+    private Button importXMLButton;
+    @FXML
+    private Button exportXMLButton;
 
     /**
      * Prints text to the console when a button is pressed
@@ -82,6 +100,7 @@ public class Controller {
     private TableColumn<Movie,String> movieDirectorColumn;
     @FXML
     private TableColumn<Movie,Integer> movieId;
+    List<Movie> movies;
 
     @FXML
     public void initialize(){
@@ -89,12 +108,33 @@ public class Controller {
     addMovieButton.setOnAction(actionEvent -> addMovieBut());
     movieListButton.setOnAction(actionEvent -> movieListBut());
     removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
+    importXMLButton.setOnAction(event -> {
+        try {
+            importXML();
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    });
+
+    exportXMLButton.setOnAction(event ->{
+        try {
+            exportXML(movies);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText(null);
+            alert.setContentText("XML file {groups.xml} successfully exported!");
+            alert.showAndWait();
+        } catch (ParserConfigurationException | TransformerException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    });
+
     saveExitButton.setOnAction(actionEvent -> saveExitBut());
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
     EntityManager em = emf.createEntityManager();
     em.getTransaction().begin();
-    List<Movie> movies = em.createQuery("from Movie", Movie.class).getResultList();
+    movies = em.createQuery("from Movie", Movie.class).getResultList();
     data.clear();
     data.addAll(movies);
     em.getTransaction().commit();
@@ -150,7 +190,12 @@ public class Controller {
                 year[0] = validateInput(yearTextField.getText(), "Year of Creation");
                 genre[0] = validateInput(genreTextField.getText(), "Genre");
                 director[0] = validateInput(placeTextField.getText(), "Director");
-                saveMovieToDB(movieName[0], Integer.valueOf(year[0]), genre[0], director[0]);
+                Movie mv  = new Movie();
+                mv.setMovieName(movieName[0]);
+                mv.setGenre(genre[0]);
+                mv.setDirector(director[0]);
+                mv.setYear(Integer.valueOf(year[0]));
+                saveMovieToDB(mv);
                 newStage.close();
             } catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -182,7 +227,7 @@ public class Controller {
         movieDirectorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
     }
 
-    private void saveMovieToDB (String name, Integer year, String genre, String director){
+    private void saveMovieToDB (Movie movie){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
         EntityManager em = emf.createEntityManager();
 
@@ -190,25 +235,72 @@ public class Controller {
 
         em.getTransaction().begin();
 
-        Movie mv  = new Movie();
-        mv.setMovieName(name);
-        mv.setGenre(genre);
-        mv.setDirector(director);
-        mv.setYear(year);
-        em.persist(mv);
+
+        em.persist(movie);
         em.getTransaction().commit();
         initialize();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success!");
         alert.setHeaderText(null);
-        alert.setContentText("Movie successfully added, " + "id is " + mv.getMovieId());
+        alert.setContentText("Movie successfully added, " + "id is " + movie.getMovieId());
         alert.showAndWait();
     }
     private void removeMovieBut(){
         System.out.println("Remove movie button");
     }
 
+    public void importXML() throws ParserConfigurationException, IOException, SAXException {
+        Stage chooseFileStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open XML File");
+        File xml = fileChooser.showOpenDialog(chooseFileStage);
+
+        DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = dBuilder.parse(xml);
+
+        document.getDocumentElement().normalize();
+
+        NodeList moviesNodeList = document.getElementsByTagName("movie");
+
+        for (int temp = 0; temp < moviesNodeList.getLength(); temp++) {
+            Node elem = moviesNodeList.item(temp);
+            NamedNodeMap attributes = elem.getAttributes();
+            String name = attributes.getNamedItem("name").getNodeValue();
+            String year = attributes.getNamedItem("year").getNodeValue();
+            String genre = attributes.getNamedItem("genre").getNodeValue();
+            String director = attributes.getNamedItem("director").getNodeValue();
+
+            Movie movie = new Movie();
+            movie.setMovieName(name);
+            movie.setYear(Integer.valueOf(year));
+            movie.setGenre(genre);
+            movie.setDirector(director);
+            saveMovieToDB(movie);
+        }
+
+
+        }
+
+    public void exportXML(List<Movie> movieSaved) throws ParserConfigurationException, IOException, TransformerException {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = builder.newDocument();
+        Node movieList = document.createElement("movies");
+        document.appendChild(movieList);
+        for (Movie movie : movieSaved) {
+            Element movieEl = document.createElement("movie");
+
+            movieList.appendChild(movieEl);
+            movieEl.setAttribute("name", movie.getMovieName());
+            movieEl.setAttribute("year", movie.getYear().toString());
+            movieEl.setAttribute("genre", movie.getGenre());
+            movieEl.setAttribute("director", movie.getDirector());
+        }
+        Transformer trans = TransformerFactory.newInstance().newTransformer();
+        try(FileWriter fileWriter = new FileWriter("movies.xml")) {
+            trans.transform(new DOMSource(document), new StreamResult(fileWriter));
+        }
+    }
     private void saveExitBut (){
         System.out.println("Save and exit button");
     }

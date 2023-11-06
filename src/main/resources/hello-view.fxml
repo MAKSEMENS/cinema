@@ -27,13 +27,13 @@
             <ComboBox fx:id="movieChoiceButton" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="206.0" promptText="Выберете месяц" style="-fx-background-color: #FFFAFA;" />
             <ScrollPane layoutX="17.0" layoutY="51.0" prefHeight="210.0" prefWidth="603.0">
                <content>
-                  <TableView fx:id="movieTableView" prefHeight="225.0" prefWidth="619.0">
+                  <TableView fx:id="movieTableView" prefHeight="207.0" prefWidth="601.0">
                     <columns>
                         <TableColumn fx:id="movieId" prefWidth="75.0" text="ID" />
-                      <TableColumn fx:id="movieNameColumn" prefWidth="248.0" text="Название" />
-                      <TableColumn fx:id="movieGenreColumn" prefWidth="112.0" text="Жанр" />
-                        <TableColumn fx:id="movieDirectorColumn" prefWidth="121.0" text="Режиссёр" />
-                        <TableColumn fx:id="movieYearOfCreationColumn" prefWidth="150.0" text="Год выпуска" />
+                      <TableColumn fx:id="movieNameColumn" prefWidth="199.0" text="Название" />
+                      <TableColumn fx:id="movieGenreColumn" prefWidth="121.0" text="Жанр" />
+                        <TableColumn fx:id="movieDirectorColumn" prefWidth="116.0" text="Режиссёр" />
+                        <TableColumn fx:id="movieYearOfCreationColumn" prefWidth="89.0" text="Год выпуска" />
                     </columns>
                   </TableView>
                </content>
@@ -42,7 +42,7 @@
             <Button fx:id="searchMovieButton" layoutX="324.0" layoutY="264.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="69.0" style="-fx-background-color: #DCDCDC;" text="Найти" />
             <ImageView fx:id="searchPng" fitHeight="36.0" fitWidth="42.0" layoutX="399.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../assets/search.png" />
+                  <Image url="@assets/search.png" />
                </image>
             </ImageView>
          </children>
@@ -52,5 +52,7 @@
             <Font name="VTMB_Handwriting2" size="34.0" />
          </font>
       </Label>
+      <Button fx:id="exportXMLButton" layoutX="397.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #00BFFF;" text="Экспорт" />
+      <Button fx:id="importXMLButton" layoutX="481.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Импорт" />
    </children>
 </AnchorPane>
