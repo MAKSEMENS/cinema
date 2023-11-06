@@ -1,6 +1,13 @@
 
-L	java:S106D"+Replace this use of System.out by a logger.(•ÂÚ´úÿÿÿÿ8ÊÃ‹îµ1
-G	java:S106I"+Replace this use of System.out by a logger.(ûüÕ—8ÊÃ‹îµ1
-G	java:S106M"+Replace this use of System.out by a logger.(ŒÈ…ä8ËÃ‹îµ1
-G	java:S106Q"+Replace this use of System.out by a logger.(ÃÅÛ8ÌÃ‹îµ1
-L	java:S106U"+Replace this use of System.out by a logger.(Âã´÷ùÿÿÿÿ8ÌÃ‹îµ1
+s
+java:S1128"QRemove this unnecessary import: java.lang classes are always implicitly imported.(”ñ¯íùÿÿÿÿ8êÖÈ«º1
+L	java:S106M"+Replace this use of System.out by a logger.(•ÂÚ´úÿÿÿÿ8€×È«º1
+G	java:S106T"+Replace this use of System.out by a logger.(òæ·ˆ8ƒ×È«º1
+H
+java:S1481~"&Remove this unused "a" local variable.(£‹çåıÿÿÿÿ8£×È«º1
+H	java:S106–"+Replace this use of System.out by a logger.(ûüÕ—8«×È«º1
+H	java:S106š"+Replace this use of System.out by a logger.(ŒÈ…ä8®×È«º1
+H	java:S106"+Replace this use of System.out by a logger.(ÃÅÛ8¯×È«º1
+M	java:S106¢"+Replace this use of System.out by a logger.(Âã´÷ùÿÿÿÿ8°×È«º1
+R
+java:S1128"5Remove this unused import 'javafx.scene.image.Image'.(‰¿½Ç8ú»Ê«º1

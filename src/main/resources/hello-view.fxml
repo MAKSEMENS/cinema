@@ -27,12 +27,13 @@
             <ComboBox fx:id="movieChoiceButton" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="206.0" promptText="Выберете месяц" style="-fx-background-color: #FFFAFA;" />
             <ScrollPane layoutX="17.0" layoutY="51.0" prefHeight="210.0" prefWidth="603.0">
                <content>
-                  <TableView prefHeight="225.0" prefWidth="619.0">
+                  <TableView fx:id="movieTableView" prefHeight="225.0" prefWidth="619.0">
                     <columns>
-                      <TableColumn prefWidth="248.0" text="Название" />
-                      <TableColumn prefWidth="112.0" text="Жанр" />
-                        <TableColumn prefWidth="121.0" text="Режиссёр" />
-                        <TableColumn prefWidth="150.0" text="Год выпуска" />
+                        <TableColumn fx:id="movieId" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="movieNameColumn" prefWidth="248.0" text="Название" />
+                      <TableColumn fx:id="movieGenreColumn" prefWidth="112.0" text="Жанр" />
+                        <TableColumn fx:id="movieDirectorColumn" prefWidth="121.0" text="Режиссёр" />
+                        <TableColumn fx:id="movieYearOfCreationColumn" prefWidth="150.0" text="Год выпуска" />
                     </columns>
                   </TableView>
                </content>

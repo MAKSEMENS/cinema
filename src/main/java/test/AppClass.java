@@ -1,4 +1,4 @@
-package test;
+/*package test;
 
 import javax.persistence.*;
 
@@ -13,7 +13,7 @@ public class AppClass {
         System.out.println("ааааааааааааааааа");
 
         Movie gr = new Movie();
-        gr.setMovieName("Spider-Man");
+        gr.setMovieName("Spider-Man-2");
 
 
         em.persist(gr);
@@ -23,3 +23,4 @@ public class AppClass {
 
     }
 }
+*/

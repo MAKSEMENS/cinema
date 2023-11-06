@@ -1,17 +1,23 @@
 package test;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import java.lang.IllegalArgumentException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.List;
 
 /**
  * @author Max
@@ -63,6 +69,21 @@ public class Controller {
      * Prints text to the console when a button is pressed
      */
     @FXML
+    private ObservableList<Movie> data = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Movie> movieTableView;
+    @FXML
+    private TableColumn<Movie,String> movieNameColumn;
+    @FXML
+    private TableColumn<Movie,Integer> movieYearOfCreationColumn;
+    @FXML
+    private TableColumn<Movie,String> movieGenreColumn;
+    @FXML
+    private TableColumn<Movie,String> movieDirectorColumn;
+    @FXML
+    private TableColumn<Movie,Integer> movieId;
+
+    @FXML
     public void initialize(){
     searchMovieButton.setOnAction(event -> searchMovieBut());
     addMovieButton.setOnAction(actionEvent -> addMovieBut());
@@ -70,6 +91,13 @@ public class Controller {
     removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
     saveExitButton.setOnAction(actionEvent -> saveExitBut());
 
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
+    EntityManager em = emf.createEntityManager();
+    em.getTransaction().begin();
+    List<Movie> movies = em.createQuery("from Movie", Movie.class).getResultList();
+    data.clear();
+    data.addAll(movies);
+    em.getTransaction().commit();
     }
 
     private void addMovieBut(){
@@ -122,7 +150,7 @@ public class Controller {
                 year[0] = validateInput(yearTextField.getText(), "Year of Creation");
                 genre[0] = validateInput(genreTextField.getText(), "Genre");
                 director[0] = validateInput(placeTextField.getText(), "Director");
-                int a = Integer.parseInt(year[0]);
+                saveMovieToDB(movieName[0], Integer.valueOf(year[0]), genre[0], director[0]);
                 newStage.close();
             } catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -146,9 +174,37 @@ public class Controller {
 
 
     private void movieListBut(){
-        System.out.println("Movie list button..");
+        movieTableView.setItems(data);
+        movieId.setCellValueFactory(new PropertyValueFactory<>("movieId"));
+        movieNameColumn.setCellValueFactory(new PropertyValueFactory<>("movieName"));
+        movieYearOfCreationColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        movieGenreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        movieDirectorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
     }
 
+    private void saveMovieToDB (String name, Integer year, String genre, String director){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
+        EntityManager em = emf.createEntityManager();
+
+        System.out.println("Saving new band to DataBase");
+
+        em.getTransaction().begin();
+
+        Movie mv  = new Movie();
+        mv.setMovieName(name);
+        mv.setGenre(genre);
+        mv.setDirector(director);
+        mv.setYear(year);
+        em.persist(mv);
+        em.getTransaction().commit();
+        initialize();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
+        alert.setHeaderText(null);
+        alert.setContentText("Movie successfully added, " + "id is " + mv.getMovieId());
+        alert.showAndWait();
+    }
     private void removeMovieBut(){
         System.out.println("Remove movie button");
     }

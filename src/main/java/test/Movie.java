@@ -9,7 +9,7 @@ public class Movie {
     private int movieId;
     private String movieName;
     private String genre;
-    private int year;
+    private Integer year;
     private String director;
     private static int[] inceptionDate = new int[3];
     private static int[] finalDate = new int[3];
@@ -37,10 +37,10 @@ public class Movie {
     }
 
     @Column(name="movie_year")
-    public int getYear(){
+    public Integer getYear(){
         return year;
     }
-    public void setYear(int newYear){
+    public void setYear(Integer newYear){
         year = newYear;
     }
 
