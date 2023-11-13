@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,7 +33,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-
+import java.util.HashMap;
 /**
  * @author Max
  * This is class for working with stage
@@ -129,7 +130,13 @@ public class Controller {
         }
     });
 
-    saveExitButton.setOnAction(actionEvent -> saveExitBut());
+    saveExitButton.setOnAction(actionEvent -> {
+        try {
+            saveExitBut();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());;
+        }
+    });
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
     EntityManager em = emf.createEntityManager();
@@ -227,6 +234,8 @@ public class Controller {
         movieDirectorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
     }
 
+
+
     private void saveMovieToDB (Movie movie){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
         EntityManager em = emf.createEntityManager();
@@ -301,8 +310,9 @@ public class Controller {
             trans.transform(new DOMSource(document), new StreamResult(fileWriter));
         }
     }
-    private void saveExitBut (){
+    private void saveExitBut () throws Exception {
         System.out.println("Save and exit button");
+        new XMLtoPDFReporter().createReport("movies.XML");
     }
 
     private void searchMovieBut(){
