@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<movies>
-    <movie director="NoName" genre="comics" name="Avengers" year="2012"/>
-    <movie director="Nolan" genre="Science Fiction" name="Interstellar" year="2016"/>
-    <movie director="Nolan" genre="Blockbuster" name="Tenet" year="2044"/>
-    <movie director="Nolan" genre="comics" name="Dark Knight" year="2022"/>
-    <movie director="Tarantino" genre="Classic" name="Pump Fiction" year="2011"/>
-    <movie director="Araki" genre="Anime" name="Attack on Titan" year="2021"/>
-    <movie director="Araki" genre="Anime" name="JoJO" year="2012"/>
-    <movie director="NoName" genre="Anime" name="Monster" year="2012"/>
-    <movie director="NoName" genre="comics" name="Major Grom" year="2012"/>
-    <movie director="Кевин Файги" genre="Боевик" name="Железный Человек 2" year="2011"/>
-</movies>
+<?xml version="1.0" encoding="UTF-8"?><movies><movie director="NoName" genre="comics" name="Avengers" year="2012"/><movie director="Nolan" genre="Science Fiction" name="Interstellar" year="2016"/><movie director="Nolan" genre="Blockbuster" name="Tenet" year="2044"/><movie director="Nolan" genre="comics" name="Dark Knight" year="2022"/><movie director="Tarantino" genre="Classic" name="Pump Fiction" year="2011"/><movie director="Araki" genre="Anime" name="Attack on Titan" year="2021"/><movie director="Araki" genre="Anime" name="JoJO" year="2012"/><movie director="NoName" genre="Anime" name="Monster" year="2012"/><movie director="NoName" genre="comics" name="Major Grom" year="2012"/><movie director="Кевин Файги" genre="Боевик" name="Железный Человек 2" year="2011"/><movie director="NoName" genre="comics" name="Avengers" year="2012"/><movie director="Nolan" genre="Science Fiction" name="Interstellar" year="2016"/><movie director="Nolan" genre="Blockbuster" name="Tenet" year="2044"/><movie director="Nolan" genre="comics" name="Dark Knight" year="2022"/><movie director="Tarantino" genre="Classic" name="Pump Fiction" year="2011"/><movie director="Araki" genre="Anime" name="Attack on Titan" year="2021"/><movie director="Araki" genre="Anime" name="JoJO" year="2012"/><movie director="NoName" genre="Anime" name="Monster" year="2012"/><movie director="NoName" genre="comics" name="Major Grom" year="2012"/><movie director="NoName" genre="comics" name="Avengers" year="2012"/><movie director="Nolan" genre="Science Fiction" name="Interstellar" year="2016"/><movie director="Nolan" genre="Blockbuster" name="Tenet" year="2044"/><movie director="Nolan" genre="comics" name="Dark Knight" year="2022"/><movie director="Tarantino" genre="Classic" name="Pump Fiction" year="2011"/><movie director="Araki" genre="Anime" name="Attack on Titan" year="2021"/><movie director="Araki" genre="Anime" name="JoJO" year="2012"/><movie director="NoName" genre="Anime" name="Monster" year="2012"/><movie director="NoName" genre="comics" name="Major Grom" year="2012"/></movies>

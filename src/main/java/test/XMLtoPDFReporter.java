@@ -7,7 +7,7 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.view.JasperViewer;
 public class XMLtoPDFReporter{
-    static String outputFilePath = "D:\\GAMES\\JetBrains\\cinema\\src\\main\\resources\\reports\\report.html";
+    static String outputFilePath = "D:\\GAMES\\JetBrains\\cinema\\src\\main\\resources\\reports\\report.pdf";
 
     public void createReport(String dataFilePath) throws Exception
     {

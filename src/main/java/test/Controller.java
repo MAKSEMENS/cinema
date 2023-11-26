@@ -325,9 +325,12 @@ public class Controller {
             super(message);
         }
     }
-    private String validateInput(String input, String fieldName) throws IllegalArgumentException {
+    public static String validateInput(String input, String fieldName) throws IllegalArgumentException {
         if (input.isEmpty()) {
             throw new IllegalArgumentException("Field " + fieldName + " is empty. Try again.");
+        }
+        if ((fieldName.equals("Year of Creation")  && !input.matches("-?\\d+(\\.\\d+)?"))) {
+            throw new NumberFormatException("Field " + fieldName + " should be an integer!");
         }
         return input;
     }
