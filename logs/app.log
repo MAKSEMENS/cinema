@@ -1,0 +1,119 @@
+2023-11-27 17:46:25,567 INFO mainLogger [main] Application started
+2023-11-27 17:46:25,864 INFO mainLogger [JavaFX Application Thread] FXML file was loaded by initialize method
+2023-11-27 17:46:25,976 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:46:26,029 INFO o.h.Version [JavaFX Application Thread] HHH000412: Hibernate Core {5.3.20.Final}
+2023-11-27 17:46:26,030 INFO o.h.c.Environment [JavaFX Application Thread] HHH000206: hibernate.properties not found
+2023-11-27 17:46:26,152 INFO o.h.a.c.Version [JavaFX Application Thread] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2023-11-27 17:46:26,313 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:46:26,358 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:46:26,359 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:46:26,359 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:46:26,368 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:46:26,752 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:46:27,273 INFO o.h.h.i.QueryTranslatorFactoryInitiator [JavaFX Application Thread] HHH000397: Using ASTQueryTranslatorFactory
+2023-11-27 17:46:29,140 INFO mainLogger [JavaFX Application Thread] Movie List is shown
+2023-11-27 17:46:29,749 INFO mainLogger [JavaFX Application Thread] Remove movie button is pressed
+2023-11-27 17:46:30,408 INFO mainLogger [JavaFX Application Thread] Adding button..
+2023-11-27 17:46:30,408 INFO mainLogger [JavaFX Application Thread] Adding Movie...
+2023-11-27 17:46:30,413 INFO mainLogger [JavaFX Application Thread] Adding window created
+2023-11-27 17:46:36,571 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:46:36,577 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:46:36,577 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:46:36,577 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:46:36,577 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:46:36,577 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:46:36,595 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:46:36,608 INFO mainLogger [JavaFX Application Thread] Saving new band to DataBase
+2023-11-27 17:46:36,621 INFO mainLogger [JavaFX Application Thread] FXML file was loaded by initialize method
+2023-11-27 17:46:36,624 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:46:36,630 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:46:36,630 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:46:36,630 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:46:36,630 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:46:36,630 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:46:36,645 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:46:36,658 INFO o.h.h.i.QueryTranslatorFactoryInitiator [JavaFX Application Thread] HHH000397: Using ASTQueryTranslatorFactory
+2023-11-27 17:46:37,667 INFO mainLogger [JavaFX Application Thread] Movie is created and added to DB
+2023-11-27 17:46:40,638 INFO mainLogger [JavaFX Application Thread] Creating XML file for export....
+2023-11-27 17:46:41,240 INFO mainLogger [JavaFX Application Thread] Export XML completed
+2023-11-27 17:46:41,711 INFO mainLogger [JavaFX Application Thread] Save and exit button
+2023-11-27 17:46:41,711 INFO mainLogger [JavaFX Application Thread] Creating PFD report...
+2023-11-27 17:46:43,217 INFO mainLogger [JavaFX Application Thread] Report has created and shown
+2023-11-27 17:46:45,182 INFO mainLogger [JavaFX Application Thread] Application closed
+2023-11-27 17:48:18,962 INFO mainLogger [main] Application started
+2023-11-27 17:48:19,279 INFO mainLogger [JavaFX Application Thread] FXML file was loaded by initialize method
+2023-11-27 17:48:19,402 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:48:19,462 INFO o.h.Version [JavaFX Application Thread] HHH000412: Hibernate Core {5.3.20.Final}
+2023-11-27 17:48:19,463 INFO o.h.c.Environment [JavaFX Application Thread] HHH000206: hibernate.properties not found
+2023-11-27 17:48:19,601 INFO o.h.a.c.Version [JavaFX Application Thread] HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2023-11-27 17:48:19,794 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:48:19,798 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:48:19,798 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:48:19,798 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:48:19,800 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:48:20,177 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:48:20,681 INFO o.h.h.i.QueryTranslatorFactoryInitiator [JavaFX Application Thread] HHH000397: Using ASTQueryTranslatorFactory
+2023-11-27 17:48:23,277 INFO mainLogger [JavaFX Application Thread] Adding button..
+2023-11-27 17:48:23,278 INFO mainLogger [JavaFX Application Thread] Adding Movie...
+2023-11-27 17:48:23,283 INFO mainLogger [JavaFX Application Thread] Adding window created
+2023-11-27 17:48:24,745 INFO mainLogger [JavaFX Application Thread] Adding button..
+2023-11-27 17:48:24,745 INFO mainLogger [JavaFX Application Thread] Adding Movie...
+2023-11-27 17:48:24,747 INFO mainLogger [JavaFX Application Thread] Adding window created
+2023-11-27 17:48:30,005 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:48:30,012 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:48:30,012 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:48:30,012 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:48:30,012 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:48:30,012 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:48:30,029 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:48:30,043 INFO mainLogger [JavaFX Application Thread] Saving new band to DataBase
+2023-11-27 17:48:30,057 INFO mainLogger [JavaFX Application Thread] FXML file was loaded by initialize method
+2023-11-27 17:48:30,060 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:48:30,066 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:48:30,066 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:48:30,067 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:48:30,067 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:48:30,067 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:48:30,081 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:48:30,094 INFO o.h.h.i.QueryTranslatorFactoryInitiator [JavaFX Application Thread] HHH000397: Using ASTQueryTranslatorFactory
+2023-11-27 17:48:31,520 INFO mainLogger [JavaFX Application Thread] Movie is created and added to DB
+2023-11-27 17:48:32,245 INFO mainLogger [JavaFX Application Thread] Adding button..
+2023-11-27 17:48:32,245 INFO mainLogger [JavaFX Application Thread] Adding Movie...
+2023-11-27 17:48:32,246 INFO mainLogger [JavaFX Application Thread] Adding window created
+2023-11-27 17:48:38,176 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:48:38,182 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:48:38,182 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:48:38,182 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:48:38,183 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:48:38,183 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:48:38,196 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:48:38,208 INFO mainLogger [JavaFX Application Thread] Saving new band to DataBase
+2023-11-27 17:48:38,212 INFO mainLogger [JavaFX Application Thread] FXML file was loaded by initialize method
+2023-11-27 17:48:38,214 INFO o.h.j.i.u.LogHelper [JavaFX Application Thread] HHH000204: Processing PersistenceUnitInfo [
+	name: test_persistence
+	...]
+2023-11-27 17:48:38,220 WARN o.h.o.c.pooling [JavaFX Application Thread] HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2023-11-27 17:48:38,220 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/cinema]
+2023-11-27 17:48:38,220 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001001: Connection properties: {password=****, user=root}
+2023-11-27 17:48:38,220 INFO o.h.o.c.pooling [JavaFX Application Thread] HHH10001003: Autocommit mode: false
+2023-11-27 17:48:38,220 INFO o.h.e.j.c.i.DriverManagerConnectionProviderImpl [JavaFX Application Thread] HHH000115: Hibernate connection pool size: 20 (min=1)
+2023-11-27 17:48:38,234 INFO o.h.d.Dialect [JavaFX Application Thread] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-11-27 17:48:38,247 INFO o.h.h.i.QueryTranslatorFactoryInitiator [JavaFX Application Thread] HHH000397: Using ASTQueryTranslatorFactory
+2023-11-27 17:48:39,303 INFO mainLogger [JavaFX Application Thread] Movie is created and added to DB
+2023-11-27 17:48:42,508 INFO mainLogger [JavaFX Application Thread] Creating XML file for export....
+2023-11-27 18:01:40,042 INFO mainLogger [JavaFX Application Thread] Export XML completed
+2023-11-27 18:01:41,629 INFO mainLogger [JavaFX Application Thread] Application closed
