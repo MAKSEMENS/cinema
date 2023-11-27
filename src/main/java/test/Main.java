@@ -7,12 +7,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import static java.lang.String.valueOf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Main extends Application {
+    private static final Logger logger = LogManager.getLogger("mainLogger");
     public static void main(String[] args) {
+        logger.info("Application started");
         launch(args);
+
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,6 +33,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+                logger.info("Application closed");
                 Platform.exit();
                 System.exit(0);
             }

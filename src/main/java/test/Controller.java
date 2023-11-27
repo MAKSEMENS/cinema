@@ -14,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -102,18 +104,21 @@ public class Controller {
     @FXML
     private TableColumn<Movie,Integer> movieId;
     List<Movie> movies;
+    private static final Logger logger = LogManager.getLogger("mainLogger");
 
     @FXML
     public void initialize(){
-    searchMovieButton.setOnAction(event -> searchMovieBut());
-    addMovieButton.setOnAction(actionEvent -> addMovieBut());
-    movieListButton.setOnAction(actionEvent -> movieListBut());
-    removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
-    importXMLButton.setOnAction(event -> {
+        logger.info("FXML file was loaded by initialize method");
+        searchMovieButton.setOnAction(event -> searchMovieBut());
+        addMovieButton.setOnAction(actionEvent -> addMovieBut());
+        movieListButton.setOnAction(actionEvent -> movieListBut());
+        removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
+        importXMLButton.setOnAction(event -> {
         try {
             importXML();
+            logger.info("Import XML completed");
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
     });
 
@@ -125,8 +130,9 @@ public class Controller {
             alert.setHeaderText(null);
             alert.setContentText("XML file {groups.xml} successfully exported!");
             alert.showAndWait();
+            logger.info("Export XML completed");
         } catch (ParserConfigurationException | TransformerException | IOException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
     });
 
@@ -134,7 +140,7 @@ public class Controller {
         try {
             saveExitBut();
         } catch (Exception e) {
-            System.out.println(e.getMessage());;
+            logger.error(e.getMessage(),e);
         }
     });
 
@@ -147,15 +153,16 @@ public class Controller {
     em.getTransaction().commit();
     }
 
+
     private void addMovieBut(){
-        System.out.println("Adding button..");
+        logger.info("Adding button..");
         final String[] movieName = new String[1];
         final String[] year = new String[1];
         final String[] genre = new String[1];
         final String[] director = new String[1];
 
         Stage newStage = new Stage();
-        System.out.println("Adding Movie...");
+        logger.info("Adding Movie...");
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10));
         gridPane.setHgap(10);
@@ -190,6 +197,7 @@ public class Controller {
         gridPane.add(placeTextField, 1, 3);
 
         gridPane.add(okButton,1,4);
+        logger.info("Adding window created");
 
         okButton.setOnAction(event -> {
             try {
@@ -204,18 +212,21 @@ public class Controller {
                 mv.setYear(Integer.valueOf(year[0]));
                 saveMovieToDB(mv);
                 newStage.close();
+                logger.info("Movie is created and added to DB");
             } catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Wrong number format");
                 alert.setHeaderText(null);
                 alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
                 alert.showAndWait();
+                logger.warn(nfe.getMessage(),nfe);
             }catch (IllegalArgumentException iae) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Input error");
                 alert.setHeaderText(null);
                 alert.setContentText(iae.getMessage());
                 alert.showAndWait();
+                logger.warn(iae.getMessage(),iae);
             }
         });
 
@@ -232,6 +243,7 @@ public class Controller {
         movieYearOfCreationColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         movieGenreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         movieDirectorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
+        logger.info("Movie List is shown");
     }
 
 
@@ -240,7 +252,7 @@ public class Controller {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
         EntityManager em = emf.createEntityManager();
 
-        System.out.println("Saving new band to DataBase");
+        logger.info("Saving new band to DataBase");
 
         em.getTransaction().begin();
 
@@ -256,7 +268,7 @@ public class Controller {
         alert.showAndWait();
     }
     private void removeMovieBut(){
-        System.out.println("Remove movie button");
+        logger.info("Remove movie button is pressed");
     }
 
     public void importXML() throws ParserConfigurationException, IOException, SAXException {
@@ -307,11 +319,13 @@ public class Controller {
         }
         Transformer trans = TransformerFactory.newInstance().newTransformer();
         try(FileWriter fileWriter = new FileWriter("movies.xml")) {
+            logger.info("Creating XML file for export....");
             trans.transform(new DOMSource(document), new StreamResult(fileWriter));
         }
     }
     private void saveExitBut () throws Exception {
-        System.out.println("Save and exit button");
+        logger.info("Save and exit button");
+        logger.info("Creating PFD report...");
         new XMLtoPDFReporter().createReport("movies.XML");
     }
 

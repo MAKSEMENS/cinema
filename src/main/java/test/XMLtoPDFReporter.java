@@ -6,7 +6,11 @@ import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class XMLtoPDFReporter{
+    private static final Logger logger = LogManager.getLogger("mainLogger");
     static String outputFilePath = "D:\\GAMES\\JetBrains\\cinema\\src\\main\\resources\\reports\\report.pdf";
 
     public void createReport(String dataFilePath) throws Exception
@@ -31,8 +35,9 @@ public class XMLtoPDFReporter{
                 exporter.exportReport();
             }
             JasperViewer.viewReport(print, false);
+            logger.info("Report has created and shown");
         } catch (JRException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
     }
 }

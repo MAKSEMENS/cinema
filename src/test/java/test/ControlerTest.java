@@ -5,6 +5,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 public class ControlerTest {
+
     private Controller appController;
     private String randomString;
     @BeforeEach

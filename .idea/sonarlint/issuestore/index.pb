@@ -18,3 +18,10 @@ L
 src/main/java/test/Main.java,7\a\7ae755c92f4be8ed89090187a6e5a3a56d187833
 [
 +src/main/java/test/MyJavaFXApplication.java,6\0\60c60bbb2c30df57fbaa46abb2c7ee2369a25f86
+:
+
+movies.xml,1\a\1ac4eb536834f06a9b2642ea38cbce83dd15deb9
+U
+%src/test/java/test/ControlerTest.java,1\f\1f67e15df5468d029e02b611f0352ca42e53627a
+X
+(src/main/java/test/XMLtoPDFReporter.java,d\a\dada601724a227170950d98956afad2c478888d7
