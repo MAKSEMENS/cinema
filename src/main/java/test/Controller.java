@@ -1,5 +1,7 @@
 package test;
 
+import groovyjarjarantlr.debug.Event;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,12 +10,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
@@ -92,6 +94,8 @@ public class Controller {
     @FXML
     private ObservableList<Movie> data = FXCollections.observableArrayList();
     @FXML
+    private ObservableList<Session> dataS = FXCollections.observableArrayList();
+    @FXML
     private TableView<Movie> movieTableView;
     @FXML
     private TableColumn<Movie,String> movieNameColumn;
@@ -104,6 +108,7 @@ public class Controller {
     @FXML
     private TableColumn<Movie,Integer> movieId;
     List<Movie> movies;
+    List<Session> sessions;
     private static final Logger logger = LogManager.getLogger("mainLogger");
 
     @FXML
@@ -111,7 +116,7 @@ public class Controller {
         logger.info("FXML file was loaded by initialize method");
         searchMovieButton.setOnAction(event -> searchMovieBut());
         addMovieButton.setOnAction(actionEvent -> addMovieBut());
-        movieListButton.setOnAction(actionEvent -> movieListBut());
+        movieListButton.setOnAction(actionEvent -> movieListBut(data));
         removeMovieButton.setOnAction(actionEvent -> removeMovieBut());
         importXMLButton.setOnAction(event -> {
         try {
@@ -144,6 +149,15 @@ public class Controller {
         }
     });
 
+    searchMovieButton.setOnAction(event -> searchMovieBut());
+
+    movieTableView.setOnMousePressed(event -> {
+        if (event.isPrimaryButtonDown() && event.getClickCount()==2){
+            Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
+            if (selectedMovie != null) showDetails(selectedMovie);
+        }
+    });
+
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
     EntityManager em = emf.createEntityManager();
     em.getTransaction().begin();
@@ -151,6 +165,8 @@ public class Controller {
     data.clear();
     data.addAll(movies);
     em.getTransaction().commit();
+
+    movieListBut(data);
     }
 
 
@@ -235,9 +251,53 @@ public class Controller {
         newStage.show();
     }
 
+    private void showDetails (Movie movie)
+    {
+        dataS.clear();
+        dataS.addAll(movie.getSessions());
 
-    private void movieListBut(){
-        movieTableView.setItems(data);
+        Stage newStage = new Stage();
+
+        TableView<Session> tableView = new TableView<Session>(dataS);
+        Button addSessionButton = new Button("Добавить сеанс");
+
+
+        TableColumn<Session, Integer> idColumn = new TableColumn<Session,Integer>("Номер");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("sessionId"));
+        tableView.getColumns().add(idColumn);
+
+        TableColumn<Session, String> dateColumn = new TableColumn<Session,String>("Дата сеанса");
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfSessionProperty());
+        tableView.getColumns().add(dateColumn);
+
+        TableColumn<Session, String> timeColumn = new TableColumn<Session,String>("Время сеанса");
+        timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeOfSessionProperty());
+        tableView.getColumns().add(timeColumn);
+
+        TableColumn<Session, Integer> countColumn = new TableColumn<Session,Integer>("Количество проданных билетов");
+        countColumn.setCellValueFactory(new PropertyValueFactory<>("countOfSold"));
+        tableView.getColumns().add(countColumn);
+        tableView.prefHeightProperty().bind(newStage.heightProperty());
+        tableView.prefWidthProperty().bind(newStage.widthProperty());
+
+        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
+        dateColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
+        timeColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
+        countColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
+
+
+        GridPane gridPane = new GridPane();
+        gridPane.add(addSessionButton,0,0);
+        gridPane.add(tableView,0,1);
+
+        Scene scene = new Scene(gridPane, 600, 250);
+
+        newStage.setScene(scene);
+        newStage.setTitle("Список сеансов для " + movie.getMovieName());
+        newStage.show();
+    }
+    private void movieListBut(ObservableList <Movie> movies){
+        movieTableView.setItems(movies);
         movieId.setCellValueFactory(new PropertyValueFactory<>("movieId"));
         movieNameColumn.setCellValueFactory(new PropertyValueFactory<>("movieName"));
         movieYearOfCreationColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -330,7 +390,14 @@ public class Controller {
     }
 
     private void searchMovieBut(){
-        System.out.println("Search movie button..");
+        ObservableList<Movie> movies = FXCollections.observableArrayList();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        List<Movie> searchedMovies = em.createQuery("select m from Movie m where lower(m.movieName) = lower(:name)", Movie.class).setParameter("name", movieNameField.getText()).getResultList();
+        movies.addAll(searchedMovies);
+        movieListBut(movies);
+        em.getTransaction().commit();
     }
 
     public static class IllegalArgumentException extends Exception {

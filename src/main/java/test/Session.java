@@ -1,55 +1,65 @@
 package test;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "sessions")
 public class Session {
-    private int sessionId;
-    private Movie movieId;
-    private static int[] date = new int[3];
-    private static int[] time = new int[3];
-    private int countOfSold;
-
     @Id
     @Column(name = "session_id",unique=true, nullable=false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getSesId(){
-        return sessionId;
-    }
-    public void setSesId (int newSes){
-        sessionId = newSes;
-    }
+    private int sessionId;
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
-    public Movie getMovie() {
-        return movieId;
-    }
-    public void setMovie(Movie newMovie) {
-        movieId = newMovie;
-    }
+    private Movie movie;
     @Column(name = "session_date")
-    public static int[] getSessionDate() {
+
+    private LocalDate date;
+    @Column(name = "session_time")
+    private  LocalTime time;
+    @Column(name = "session_count")
+    private int countOfSold;
+
+
+    public int getSessionId(){
+        return sessionId;
+    }
+    public void setSessionId (int newSes){
+        sessionId = newSes;
+    }
+
+
+    public LocalDate getSessionDate() {
         return date;
     }
-    public void setSessionDate(int[] newDate) {
-        date[0] = newDate[0];
-        date[1] = newDate[1];
-        date[2] = newDate[2];
+    public void setSessionDate(LocalDate newDate) {
+        date= newDate;
+
     }
-    @Column(name = "session_time")
-    public static int[] getSessionTime() {
+
+    public LocalTime getSessionTime() {
         return time;
     }
-    public void setSessionTime(int[] newTime) {
+    public void setSessionTime(LocalTime newTime) {
         time = newTime;
     }
-    @Column(name = "session_count")
-    public int getCount_Sold() {
+
+    public int getCountOfSold() {
         return countOfSold;
     }
-    public void setCount_Sold(int newCount_Sold) {
+    public void setCountOfSold(int newCount_Sold) {
         countOfSold = newCount_Sold;
     }
 
+    public StringProperty dateOfSessionProperty() {
+        return new SimpleStringProperty(date.toString());
+    }
+    public StringProperty timeOfSessionProperty() {
+        return new SimpleStringProperty(time.toString());
+    }
 }

@@ -29,6 +29,7 @@ public class Main extends Application {
         // Настройка и отображение окна
         primaryStage.setTitle("CINEMA");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

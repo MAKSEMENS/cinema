@@ -2,25 +2,36 @@ package test;
 
 import javax.persistence.*;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
 public class Movie {
+    @Id
+    @Column(name = "movie_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int movieId;
+    @Column(name="movie_title")
     private String movieName;
+    @Column(name="movie_genre")
     private String genre;
+    @Column(name="movie_year")
     private Integer year;
+    @Column(name="movie_director")
     private String director;
+    @Column(name = "movie_inceptionDate")
     private static int[] inceptionDate = new int[3];
+    @Column(name = "movie_finalDate")
     private static int[] finalDate = new int[3];
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Session> sessions = new ArrayList<>();
 
     public Movie(){
 
     }
 
-    @Id
-    @Column(name = "movie_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public int getMovieId(){
         return movieId;
     }
@@ -28,7 +39,7 @@ public class Movie {
         movieId = newMovieId;
     }
 
-    @Column(name="movie_title")
+
     public String getMovieName(){
         return movieName;
     }
@@ -36,7 +47,7 @@ public class Movie {
         movieName = newTitle;
     }
 
-    @Column(name="movie_year")
+
     public Integer getYear(){
         return year;
     }
@@ -44,27 +55,35 @@ public class Movie {
         year = newYear;
     }
 
-    @Column(name="movie_genre")
+
     public String getGenre(){
         return genre;
     }
     public void setGenre(String newGenre){
         genre = newGenre;
     }
-    @Column(name="movie_director")
+
     public String getDirector(){
         return director;
     }
     public void setDirector(String newDirector){
         director = newDirector;
     }
-    @Column(name = "movie_inceptionDate")
+
     public static int[] getIncDate (){
         return inceptionDate;
     }
-    @Column(name = "movie_finalDate")
+
     public static int[] getFinDate (){
         return finalDate;
     }
 
+
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
+    }
 }
