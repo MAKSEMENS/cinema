@@ -23,7 +23,11 @@ public class Session {
     @Column(name = "session_time")
     private  LocalTime time;
     @Column(name = "session_count")
-    private int countOfSold;
+    private Integer countOfSold;
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 
 
     public int getSessionId(){
@@ -42,6 +46,8 @@ public class Session {
 
     }
 
+
+
     public LocalTime getSessionTime() {
         return time;
     }
@@ -49,7 +55,7 @@ public class Session {
         time = newTime;
     }
 
-    public int getCountOfSold() {
+    public Integer getCountOfSold() {
         return countOfSold;
     }
     public void setCountOfSold(int newCount_Sold) {

@@ -20,8 +20,8 @@
          </font>
       </Button>
       <Button fx:id="movieListButton" layoutX="8.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Список фильмов" />
-      <Button fx:id="addMovieButton" layoutX="137.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Добавить фильм" />
-      <Button fx:id="removeMovieButton" layoutX="272.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="удалить фильм" />
+      <Button fx:id="addMovieButton" layoutX="133.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Добавить фильм" />
+      <Button fx:id="reportButton" layoutX="259.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="отчёт о фильмах" />
       <AnchorPane layoutY="98.0" prefHeight="302.0" prefWidth="700.0" style="-fx-background-color: #00BFFF;">
          <children>
             <ComboBox fx:id="movieChoiceButton" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="206.0" promptText="Выберете месяц" style="-fx-background-color: #FFFAFA;" />
@@ -52,7 +52,7 @@
             <Font name="VTMB_Handwriting2" size="34.0" />
          </font>
       </Label>
-      <Button fx:id="exportXMLButton" layoutX="397.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #00BFFF;" text="Экспорт" />
-      <Button fx:id="importXMLButton" layoutX="481.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Импорт" />
+      <Button fx:id="exportXMLButton" layoutX="385.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #00BFFF;" text="Экспорт" />
+      <Button fx:id="importXMLButton" layoutX="473.0" layoutY="58.0" mnemonicParsing="false" style="-fx-background-color: #00BFFF;" text="Импорт" />
    </children>
 </AnchorPane>
