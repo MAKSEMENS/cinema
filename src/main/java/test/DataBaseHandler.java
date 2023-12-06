@@ -3,12 +3,9 @@ package test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -141,8 +138,8 @@ public class DataBaseHandler {
     }
 
     public static void removeSession(Session session) {
-        boolean k = AlertHandler.makeConfAlertWindow(Alert.AlertType.INFORMATION, "ПОДТВЕРЖДЕНИЕ!", null,   "Вы уверены, что хотите удалить данный сеанс?");
-        if (k==true) {
+        boolean k = AlertHandler.makeConfAlertWindow(Alert.AlertType.INFORMATION, "ПОДТВЕРЖДЕНИЕ!", null, "Вы уверены, что хотите удалить данный сеанс?");
+        if (k) {
             EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("test_persistence");
 
             // Открытие EntityManager
@@ -151,13 +148,12 @@ public class DataBaseHandler {
             // Начало транзакции
             entityManager.getTransaction().begin();
 
-            // Загрузка фильма
-            int movieId = session.getSessionId(); // Укажите актуальный идентификатор фильма
-            Movie newMovie = entityManager.find(Movie.class, movieId);
-
-            if (session != null) {
-                // Удаление фильма и всех его сеансов
-                entityManager.remove(newMovie);
+            int sessionId = session.getSessionId();
+            Session newSession = entityManager.find(Session.class, sessionId);
+            Movie newMovie = entityManager.find(Movie.class, session.getMovieId());
+            if (newSession != null) {
+                System.out.println(newSession.getSessionId());
+                newMovie.getSessions().remove(newSession);
             }
 
             // Коммит транзакции
@@ -166,7 +162,32 @@ public class DataBaseHandler {
             // Закрытие EntityManager и фабрики EntityManager
             entityManager.close();
             entityManagerFactory.close();
-            AlertHandler.makeAlertWindow(Alert.AlertType.INFORMATION, "Success!", null,   "Session" + " successfully removed");
+            AlertHandler.makeAlertWindow(Alert.AlertType.INFORMATION, "Success!", null, "Session" + " successfully removed");
         }
     }
+
+        public static void removeSession(Movie movie, TableView <Session> sessionTableView, ObservableList<Session> sessionData, String persistenceUnitName) {
+            boolean k = AlertHandler.makeConfAlertWindow(Alert.AlertType.INFORMATION, "ПОДТВЕРЖДЕНИЕ!", null, "Вы уверены, что хотите удалить данный сеанс?");
+            if (k) {
+                Session selectedSession= sessionTableView.getSelectionModel().getSelectedItem();
+                if (selectedSession != null) {
+                    int selectedSessionId = selectedSession.getSessionId();
+                    EntityManager entityManager = Persistence.createEntityManagerFactory(persistenceUnitName).createEntityManager();
+                        logger.info("Trying to delete member");
+                        entityManager.getTransaction().begin();
+                        entityManager.createQuery("DELETE FROM Session WHERE id = ?1 ").setParameter(1, selectedSessionId).executeUpdate();
+                        entityManager.getTransaction().commit();
+                        sessionData.remove(selectedSession);
+                        movie.getSessions().remove(selectedSession);
+                        sessionTableView.refresh();
+
+                    AlertHandler.makeAlertWindow(Alert.AlertType.INFORMATION, "Success!", null, "Session" + " successfully removed");
+
+                }
+                else {
+                    logger.info("Trying to delete member, but no member was selected");
+                }
+            }
+        }
+
 }

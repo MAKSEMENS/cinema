@@ -24,7 +24,7 @@ public class Movie {
     private static int[] inceptionDate = new int[3];
     @Column(name = "movie_finalDate")
     private static int[] finalDate = new int[3];
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Session> sessions = new ArrayList<>();
 
     public Movie(){

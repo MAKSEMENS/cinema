@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.stage.StageStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
@@ -109,9 +110,13 @@ public class Controller {
     private TableColumn<Movie,String> movieDirectorColumn;
     @FXML
     private TableColumn<Movie,Integer> movieId;
+    private Stage primaryStage;
     List<Movie> movies;
     List<Session> sessions;
     private static final Logger logger = LogManager.getLogger("mainLogger");
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 
     @FXML
     public void initialize(){
@@ -194,10 +199,9 @@ public class Controller {
         primaryStage.show();
 
         button1.setOnAction(event -> addSessionDialog(movie, primaryStage,dataS,sessionsTableView,1));
-        button3.setOnAction(event ->{
-            DataBaseHandler.removeSession(session);
+        button2.setOnAction(event ->{
+            DataBaseHandler.removeSession(movie, sessionsTableView, dataS, "test_persistence");
             primaryStage.close();
-            initialize();
         });
         button3.setOnAction(event -> primaryStage.close());
 
@@ -211,6 +215,9 @@ public class Controller {
         Button button2 = new Button("редактировать информацию о фильме "  );
         Button button3 = new Button("Удалить фильм");
         Button button4 = new Button("Выйти");
+
+        primaryStage.initModality(Modality.WINDOW_MODAL);
+        primaryStage.initOwner(this.primaryStage);
 
         // Создание вертикальной панели и добавление кнопок
         VBox vbox = new VBox(10); // 10 - вертикальный зазор между элементами
@@ -226,7 +233,7 @@ public class Controller {
         // Показать окно
         primaryStage.show();
 
-        button1.setOnAction(event -> showSessions(movie));
+        button1.setOnAction(event -> showSessions(movie, primaryStage));
         button2.setOnAction(event -> editMovieWindow(movie));
         button3.setOnAction(event ->{
             DataBaseHandler.removeMovie(movie);
@@ -491,15 +498,20 @@ public class Controller {
     }
 
 
-    private void showSessions (Movie movie)
+    private void showSessions (Movie movie, Stage parentStage)
     {
         dataS.clear();
         dataS.addAll(movie.getSessions());
 
         Stage newStage = new Stage();
+        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initStyle(StageStyle.UNIFIED);
+        newStage.initOwner(parentStage);
 
         TableView<Session> tableView = new TableView<Session>(dataS);
         Button addSessionButton = new Button("Добавить сеанс");
+
+
 
 
         TableColumn<Session, Integer> idColumn = new TableColumn<Session,Integer>("Номер");

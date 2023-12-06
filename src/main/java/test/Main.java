@@ -23,6 +23,9 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/hello-view.fxml"));
         Parent root = loader.load();
 
+        Controller controller = loader.getController();
+        controller.setPrimaryStage(primaryStage);
+
         // Создание сцены
         Scene scene = new Scene(root, 700, 400);
 
@@ -31,6 +34,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {

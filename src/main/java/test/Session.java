@@ -29,7 +29,7 @@ public class Session {
         this.movie = movie;
     }
 
-
+    public int getMovieId(){return movie.getMovieId();};
     public int getSessionId(){
         return sessionId;
     }
