@@ -1,7 +1,9 @@
 package test;
 
+import javafx.beans.property.SimpleStringProperty;
+
 import javax.persistence.*;
-import java.security.PublicKey;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,9 @@ public class Movie {
     @Column(name="movie_director")
     private String director;
     @Column(name = "movie_inceptionDate")
-    private static int[] inceptionDate = new int[3];
+    private LocalDate inceptionDate;
     @Column(name = "movie_finalDate")
-    private static int[] finalDate = new int[3];
+    private LocalDate finalDate;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Session> sessions = new ArrayList<>();
 
@@ -70,14 +72,23 @@ public class Movie {
         director = newDirector;
     }
 
-    public static int[] getIncDate (){
+    public  LocalDate getIncDate (){
         return inceptionDate;
     }
 
-    public static int[] getFinDate (){
+    public  LocalDate getFinDate (){
         return finalDate;
     }
 
+    public void setInceptionDate(LocalDate newInceptionDate){inceptionDate = newInceptionDate;}
+    public void setFinalDate(LocalDate newFinalDate){finalDate = newFinalDate;}
+
+    public SimpleStringProperty inceptionDateProperty (){
+        return new SimpleStringProperty(inceptionDate.toString());
+    }
+    public SimpleStringProperty finalDateProperty (){
+        return new SimpleStringProperty(finalDate.toString());
+    }
 
     public  List<Session> getSessions() {
         return sessions;
@@ -87,4 +98,10 @@ public class Movie {
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
     }
+
+    public String getFirstMonth (){return inceptionDate.getMonth().toString();}
+    public String getLastMonth (){return finalDate.getMonth().toString();}
+
+    public String getFirstYear (){return String.valueOf(inceptionDate.getYear());}
+    public String getLastYear (){return String.valueOf(finalDate.getYear());}
 }

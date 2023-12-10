@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import tornadofx.control.DateTimePicker;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,7 +61,7 @@ public class Controller {
     *This is a button for movie choice
     * */
     @FXML
-    private ComboBox<?> movieChoiceButton;
+    private ComboBox<String> movieChoiceButton;
     /**
      * This is a ComboBox for showing movie list
      */
@@ -109,10 +110,20 @@ public class Controller {
     @FXML
     private TableColumn<Movie,String> movieDirectorColumn;
     @FXML
-    private TableColumn<Movie,Integer> movieId;
+    private TableColumn<Movie, String> movieEndDateColumn;
+    @FXML
+    private TableColumn<Movie,String> movieInceptionDateColumn;
+    @FXML
+    private TableColumn<Movie,String> movieId;
+    @FXML
+    private Button updateListButton;
     private Stage primaryStage;
     List<Movie> movies;
     List<Session> sessions;
+    ObservableList<String> month = FXCollections.observableArrayList(
+            "Январь", "Февраль", "Март", "Апрель",
+            "Май", "Июнь", "Июль", "Август",
+            "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
     private static final Logger logger = LogManager.getLogger("mainLogger");
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -120,6 +131,8 @@ public class Controller {
 
     @FXML
     public void initialize(){
+        updateListButton.setOnAction(event -> showByMonth());
+        movieChoiceButton.setItems(month);
         logger.info("FXML file was loaded by initialize method");
         searchMovieButton.setOnAction(event -> searchMovieBut());
         addMovieButton.setOnAction(actionEvent -> addMovieWindow());
@@ -140,6 +153,7 @@ public class Controller {
             logger.error(e.getMessage(),e);
         }
     });
+
 
     exportXMLButton.setOnAction(event ->{
         try {
@@ -177,6 +191,7 @@ public class Controller {
     movies = data;
     showMovieList(data);
     }
+
 
     public void selectionForSessionWindow(Session session, TableView<Session> sessionsTableView, Movie movie ){
         Stage primaryStage = new Stage();
@@ -234,7 +249,7 @@ public class Controller {
         primaryStage.show();
 
         button1.setOnAction(event -> showSessions(movie, primaryStage));
-        button2.setOnAction(event -> editMovieWindow(movie));
+        button2.setOnAction(event -> editMovieWindow(movie, primaryStage));
         button3.setOnAction(event ->{
             DataBaseHandler.removeMovie(movie);
             primaryStage.close();
@@ -246,7 +261,7 @@ public class Controller {
     }
 
 
-    private void editMovieWindow(Movie movie){
+    private void editMovieWindow(Movie movie, Stage primaryStage){
 
         Map<String, String> parameters = new HashMap<>();
 
@@ -254,9 +269,13 @@ public class Controller {
         parameters.put("year", movie.getYear().toString());
         parameters.put("director", movie.getDirector());
         parameters.put("genre", movie.getGenre());
+        parameters.put("inceptionDate", movie.inceptionDateProperty().getValue());
+        parameters.put("finalDate", movie.finalDateProperty().getValue());
 
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(this.primaryStage);
 
         GridPane dialogGrid = new GridPane();
         dialogGrid.setPadding(new Insets(20));
@@ -267,6 +286,8 @@ public class Controller {
         TextField year = new TextField(parameters.get("year"));
         TextField director = new TextField(parameters.get("director"));
         TextField genre = new TextField(parameters.get("genre"));
+        DatePicker beginPicker = new DatePicker(LocalDate.parse(parameters.get("inceptionDate"),DateTimeFormatter.ISO_DATE));
+        DatePicker endPicker = new DatePicker(LocalDate.parse(parameters.get("finalDate"),DateTimeFormatter.ISO_DATE));
 
         dialogGrid.add(new Label("Название фильма: "),0,0);
         dialogGrid.add(title,1,0);
@@ -276,9 +297,13 @@ public class Controller {
         dialogGrid.add(director, 1 , 2);
         dialogGrid.add(new Label("Жанр:"), 0,3);
         dialogGrid.add(genre, 1,3);
+        dialogGrid.add(new Label("Начальная дата:"), 0,4);
+        dialogGrid.add(beginPicker, 1,4);
+        dialogGrid.add(new Label("Конечная дата:"), 0,5);
+        dialogGrid.add(endPicker, 1,5);
 
         Button editButton = new Button("Применить изменения: ");
-        dialogGrid.add(editButton, 1, 4);
+        dialogGrid.add(editButton, 1, 6);
 
         editButton.setOnAction(event -> {
             try {
@@ -288,11 +313,16 @@ public class Controller {
                 movie.setYear(Integer.parseInt(year.getText()));
                 movie.setGenre(genre.getText());
                 movie.setDirector(director.getText());
+                movie.setInceptionDate(beginPicker.getValue());
+                movie.setFinalDate(endPicker.getValue());
+
                 Map<String, String> newValues = new HashMap<>();
                 newValues.put("movieName",title.getText());
                 newValues.put("year",year.getText());
                 newValues.put("genre", genre.getText());
                 newValues.put("director", director.getText());
+                newValues.put("inceptionDate",movie.inceptionDateProperty().getValue());
+                newValues.put("finalDate", movie.finalDateProperty().getValue());
                 DataBaseHandler.editDataMovie(movie.getMovieId(), newValues,"test_persistence");
                 data.clear();
                 getDataFromDB("test_persistence", data);
@@ -306,7 +336,7 @@ public class Controller {
 
         });
 
-        Scene dialogScene = new Scene(dialogGrid, 350, 200);
+        Scene dialogScene = new Scene(dialogGrid, 350, 300);
         dialogStage.setScene(dialogScene);
         dialogStage.showAndWait();
     }
@@ -326,7 +356,7 @@ public class Controller {
         gridPane.setPadding(new Insets(10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        Scene scene = new Scene(gridPane, 300, 200);
+        Scene scene = new Scene(gridPane, 300, 300);
 
         // Create labels and text fields for each form
         Label nameLabel = new Label("Name:");
@@ -338,8 +368,15 @@ public class Controller {
         Label genreLabel = new Label("Genre:");
         TextField genreTextField = new TextField();
 
-        Label placeLabel = new Label("Director:");
+        Label directorLabel = new Label("Director:");
         TextField placeTextField = new TextField();
+
+        Label beginLabel = new Label("Начальная дата:");
+        DateTimePicker beginDatePicker = new DateTimePicker();
+
+        Label endLabel = new Label("Конечная дата:");
+        DateTimePicker endDatePicker = new DateTimePicker();
+
         Button okButton = new Button("OK");
 
         // Add labels and text fields to the grid pane
@@ -352,10 +389,18 @@ public class Controller {
         gridPane.add(genreLabel, 0, 2);
         gridPane.add(genreTextField, 1, 2);
 
-        gridPane.add(placeLabel, 0, 3);
+        gridPane.add(directorLabel, 0, 3);
         gridPane.add(placeTextField, 1, 3);
 
-        gridPane.add(okButton,1,4);
+        gridPane.add(beginLabel,0, 4);
+        gridPane.add(beginDatePicker, 1, 4);
+
+        gridPane.add(endLabel,0, 5);
+        gridPane.add(endDatePicker, 1, 5);
+
+
+
+        gridPane.add(okButton,1,6);
         logger.info("Adding window created");
 
         okButton.setOnAction(event -> {
@@ -369,6 +414,8 @@ public class Controller {
                 mv.setGenre(genre[0]);
                 mv.setDirector(director[0]);
                 mv.setYear(Integer.valueOf(year[0]));
+                mv.setInceptionDate(beginDatePicker.getValue());
+                mv.setFinalDate(endDatePicker.getValue());
                 DataBaseHandler.saveMovieToDB(mv);
                 initialize();
                 newStage.close();
@@ -566,6 +613,8 @@ public class Controller {
         movieYearOfCreationColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         movieGenreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         movieDirectorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
+        movieInceptionDateColumn.setCellValueFactory((cellData -> cellData.getValue().inceptionDateProperty()));
+        movieEndDateColumn.setCellValueFactory((cellData -> cellData.getValue().finalDateProperty()));
         logger.info("Movie List is shown");
     }
 
@@ -623,13 +672,18 @@ public class Controller {
             String year = attributes.getNamedItem("year").getNodeValue();
             String genre = attributes.getNamedItem("genre").getNodeValue();
             String director = attributes.getNamedItem("director").getNodeValue();
+            String incDate = attributes.getNamedItem("movie_inceptionDate").getNodeValue();
+            String endDate = attributes.getNamedItem("movie_finalDate").getNodeValue();
 
             Movie movie = new Movie();
             movie.setMovieName(name);
             movie.setYear(Integer.valueOf(year));
             movie.setGenre(genre);
             movie.setDirector(director);
+            movie.setInceptionDate(LocalDate.parse(incDate,DateTimeFormatter.ISO_DATE));
+            movie.setFinalDate(LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE));
             DataBaseHandler.saveMovieToDB(movie);
+            initialize();
         }
 
 
@@ -648,6 +702,8 @@ public class Controller {
             movieEl.setAttribute("year", movie.getYear().toString());
             movieEl.setAttribute("genre", movie.getGenre());
             movieEl.setAttribute("director", movie.getDirector());
+            movieEl.setAttribute("movie_inceptionDate", movie.inceptionDateProperty().getValue());
+            movieEl.setAttribute("movie_finalDate", movie.finalDateProperty().getValue());
         }
         Transformer trans = TransformerFactory.newInstance().newTransformer();
         try(FileWriter fileWriter = new FileWriter("movies.xml")) {
@@ -663,8 +719,15 @@ public class Controller {
 
     private void searchMovieBut(){
         ObservableList<Movie> movie_data = FXCollections.observableArrayList();
-        movies = DataBaseHandler.getSearchedMovies(movieNameField.getText());
+        movies = DataBaseHandler.getSearchedByNameMovies(movieNameField.getText());
         movie_data.addAll(movies);
+        showMovieList(movie_data);
+    }
+    private void showByMonth() {
+        ObservableList<Movie> movie_data = FXCollections.observableArrayList();
+        String month = movieChoiceButton.getValue();
+        List<Movie> filtredMovies = DataBaseHandler.getSearchedByMonthMovies(month);
+        movie_data.addAll(filtredMovies);
         showMovieList(movie_data);
     }
 

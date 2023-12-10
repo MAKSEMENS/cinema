@@ -18,7 +18,6 @@ public class Session {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
     @Column(name = "session_date")
-
     private LocalDate date;
     @Column(name = "session_time")
     private  LocalTime time;

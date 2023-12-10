@@ -11,10 +11,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class DataBaseHandler {
+
     private static final Logger logger = LogManager.getLogger("mainLogger");
 
     public static void getDataFromDB(String persistenceUnitName, ObservableList<Movie> groupsData) {
@@ -48,11 +52,34 @@ public class DataBaseHandler {
         alert.setContentText("Movie successfully added, " + "id is " + movie.getMovieId());
         alert.showAndWait();
     }
-    public static List<Movie> getSearchedMovies (String movieName){
+    public static List<Movie> getSearchedByNameMovies (String movieName){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         List<Movie> searchedMovies = em.createQuery("select m from Movie m where lower(m.movieName) = lower(:name)", Movie.class).setParameter("name", movieName).getResultList();
+        em.getTransaction().commit();
+        return searchedMovies;
+    }
+    public static List<Movie> getSearchedByMonthMovies(String month) {
+        Map<String, Integer> monthMap = new HashMap<>();
+        // Заполнение HashMap значениями
+        monthMap.put("Январь", 1);
+        monthMap.put("Февраль", 2);
+        monthMap.put("Март", 3);
+        monthMap.put("Апрель", 4);
+        monthMap.put("Май", 5);
+        monthMap.put("Июнь", 6);
+        monthMap.put("Июль", 7);
+        monthMap.put("Август", 8);
+        monthMap.put("Сентябрь", 9);
+        monthMap.put("Октябрь", 10);
+        monthMap.put("Ноябрь", 11);
+        monthMap.put("Декабрь", 12);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        List<Movie> searchedMovies = em.createQuery("SELECT m FROM Movie m " +
+                        "WHERE MONTH(m.inceptionDate) <= :date AND MONTH(m.finalDate) >= :date ", Movie.class).setParameter("date",monthMap.get(month)).getResultList();
         em.getTransaction().commit();
         return searchedMovies;
     }
@@ -92,12 +119,14 @@ public class DataBaseHandler {
     public static void editDataMovie(int selectedMovieId, Map<String,String> paramValue, String persistenceUnitName) {
         EntityManager entityManager = Persistence.createEntityManagerFactory(persistenceUnitName).createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.createQuery("UPDATE Movie SET movieName = ?1, year = ?2, genre = ?3, director = ?4 WHERE id = ?5")
+        entityManager.createQuery("UPDATE Movie SET movieName = ?1, year = ?2, genre = ?3, director = ?4, inceptionDate =?5, finalDate = ?6   WHERE id = ?7")
                 .setParameter(1, paramValue.get("movieName"))
                 .setParameter(2, Integer.parseInt(paramValue.get("year")))
                 .setParameter(3, paramValue.get("genre"))
                 .setParameter(4, paramValue.get("director"))
-                .setParameter(5,selectedMovieId)
+                .setParameter(5, LocalDate.parse(paramValue.get("inceptionDate"), DateTimeFormatter.ISO_DATE))
+                .setParameter(6, LocalDate.parse(paramValue.get("finalDate"), DateTimeFormatter.ISO_DATE))
+                .setParameter(7,selectedMovieId)
                 .executeUpdate();
         entityManager.getTransaction().commit();
 
@@ -189,5 +218,6 @@ public class DataBaseHandler {
                 }
             }
         }
+
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <movies>
-    <movie genre="comics" name="Avengers" year="2012" director="NoName"/>
-    <movie genre="Science Fiction" name="Interstellar" year="2016" director="Nolan"/>
-    <movie genre="Blockbuster" name="Tenet" year="2044" director="Nolan"/>
-    <movie genre="comics" name="Dark Knight" year="2022" director="Nolan"/>
-    <movie genre="Classic" name="Pump Fiction" year="2011" director="Tarantino"/>
-    <movie genre="Anime" name="Attack on Titan" year="2021" director="Araki"/>
-    <movie genre="Anime" name="JoJO" year="2012" director="Araki"/>
-    <movie genre="Anime" name="Monster" year="2012" director="NoName"/>
-    <movie genre="comics" name="Major Grom" year="2012" director="NoName"/>
+    <movie genre="comics" name="Avengers" year="2012" director="NoName" movie_inceptionDate="2023-01-01" movie_finalDate="2023-04-01"/>
+    <movie genre="Science Fiction" name="Interstellar" year="2016" director="Nolan" movie_inceptionDate="2023-01-01" movie_finalDate="2023-04-01"/>
+    <movie genre="Blockbuster" name="Tenet" year="2044" director="Nolan" movie_inceptionDate="2023-01-01" movie_finalDate="2023-04-01"/>
+    <movie genre="comics" name="Dark Knight" year="2022" director="Nolan" movie_inceptionDate="2023-03-01" movie_finalDate="2023-07-01"/>
+    <movie genre="Classic" name="Pump Fiction" year="2011" director="Tarantino" movie_inceptionDate="2023-08-01" movie_finalDate="2023-09-01"/>
+    <movie genre="Anime" name="Attack on Titan" year="2021" director="Araki" movie_inceptionDate="2023-10-01" movie_finalDate="2023-12-01"/>
+    <movie genre="Anime" name="JoJO" year="2012" director="Araki" movie_inceptionDate="2023-03-01" movie_finalDate="2023-05-01"/>
+    <movie genre="Anime" name="Monster" year="2012" director="NoName" movie_inceptionDate="2023-05-01" movie_finalDate="2023-09-01"/>
+    <movie genre="comics" name="Major Grom" year="2012" director="NoName" movie_inceptionDate="2023-04-01" movie_finalDate="2023-10-01"/>
 </movies>

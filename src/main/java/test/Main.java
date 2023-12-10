@@ -27,7 +27,7 @@ public class Main extends Application {
         controller.setPrimaryStage(primaryStage);
 
         // Создание сцены
-        Scene scene = new Scene(root, 700, 400);
+        Scene scene = new Scene(root, 906, 595);
 
         // Настройка и отображение окна
         primaryStage.setTitle("CINEMA");
