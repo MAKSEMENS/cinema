@@ -1,1 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?><movies><movie director="1" genre="боевик" movie_finalDate="2023-12-06" movie_inceptionDate="2023-12-06" name="1" year="2008"/><movie director="NoName" genre="comics" movie_finalDate="2023-04-01" movie_inceptionDate="2023-01-01" name="Avengers" year="2012"/><movie director="Nolan" genre="Science Fiction" movie_finalDate="2023-04-01" movie_inceptionDate="2023-01-01" name="Interstellar" year="2016"/><movie director="Nolan" genre="Blockbuster" movie_finalDate="2023-04-01" movie_inceptionDate="2023-01-01" name="Tenet" year="2044"/><movie director="Nolan" genre="comics" movie_finalDate="2023-07-01" movie_inceptionDate="2023-03-01" name="Dark Knight" year="2022"/><movie director="Tarantino" genre="Classic" movie_finalDate="2023-09-01" movie_inceptionDate="2023-08-01" name="Pump Fiction" year="2011"/><movie director="Araki" genre="Anime" movie_finalDate="2023-12-01" movie_inceptionDate="2023-10-01" name="Attack on Titan" year="2021"/><movie director="Araki" genre="Anime" movie_finalDate="2023-05-01" movie_inceptionDate="2023-03-01" name="JoJO" year="2012"/><movie director="NoName" genre="Anime" movie_finalDate="2023-09-01" movie_inceptionDate="2023-05-01" name="Monster" year="2012"/><movie director="NoName" genre="comics" movie_finalDate="2023-10-01" movie_inceptionDate="2023-04-01" name="Major Grom" year="2012"/></movies>
+<?xml version="1.0" encoding="UTF-8"?>
+<movies>
+    <movie director="Джосс Уидон" genre="Комикс" movie_finalDate="2023-04-01" movie_inceptionDate="2023-01-01"
+           name="Мстители" year="2012"/>
+    <movie director="Кристофер Нолан" genre="Научная фантастика" movie_finalDate="2023-04-01"
+           movie_inceptionDate="2023-01-01" name="Интерстеллар" year="2014"/>
+    <movie director="Кристофер Нолан" genre="фантастика" movie_finalDate="2023-04-01" movie_inceptionDate="2023-01-01"
+           name="Довод" year="2044"/>
+    <movie director="Кристофер Нолан" genre="Комикс" movie_finalDate="2023-07-01" movie_inceptionDate="2023-03-01"
+           name="Тёмный Рыцарь" year="2022"/>
+    <movie director="Квентин Тарантино" genre="Классика" movie_finalDate="2023-09-01" movie_inceptionDate="2023-08-01"
+           name="Криминальное чтиво" year="2011"/>
+    <movie director="Араки" genre="Аниме" movie_finalDate="2023-05-01" movie_inceptionDate="2023-03-01"
+           name="Невероятные приключения ДжоДжо" year="2012"/>
+    <movie director="Ноунейм" genre="Аниме" movie_finalDate="2023-09-01" movie_inceptionDate="2023-05-01" name="Монстр"
+           year="2012"/>
+    <movie director="Неизвестен" genre="Комикс" movie_finalDate="2023-10-01" movie_inceptionDate="2023-04-01"
+           name="Майор Гром" year="2012"/>
+    <movie director="Джеймс Кэмерон" genre="Драма" movie_finalDate="2023-11-01" movie_inceptionDate="2023-10-01"
+           name="Спасение" year="2023"/>
+    <movie director="Питер Джексон" genre="Фэнтези" movie_finalDate="2024-03-01" movie_inceptionDate="2024-01-01"
+           name="Загадочный лес" year="2024"/>
+    <movie director="Мартин Скорсезе" genre="Триллер" movie_finalDate="2024-02-01" movie_inceptionDate="2023-11-01"
+           name="Тень прошлого" year="2022"/>
+    <movie director="Таика Вайтити" genre="Комедия" movie_finalDate="2024-03-01" movie_inceptionDate="2023-12-01"
+           name="Смешанные чувства" year="2023"/>
+    <movie director="Дэвид Литч" genre="Боевик" movie_finalDate="2023-11-01" movie_inceptionDate="2023-10-01"
+           name="Путь к победе" year="2022"/>
+    <movie director="Гильермо дель Торо" genre="Мистика" movie_finalDate="2024-04-01" movie_inceptionDate="2024-02-01"
+           name="Забытый страх" year="2024"/>
+    <movie director="Ридли Скотт" genre="Фантастика" movie_finalDate="2024-02-01" movie_inceptionDate="2023-11-01"
+           name="Время перемен" year="2023"/>
+    <movie director="Алекс Гибни" genre="Документальный" movie_finalDate="2023-12-01" movie_inceptionDate="2023-10-01"
+           name="Основатель" year="2022"/>
+    <movie director="Джеймс Ван" genre="Ужасы" movie_finalDate="2024-04-01" movie_inceptionDate="2024-01-01"
+           name="Потерянный в темноте" year="2024"/>
+    <movie director="Нора Эфрон" genre="Романтика" movie_finalDate="2024-03-01" movie_inceptionDate="2023-12-01"
+           name="Любовь и мечты" year="2023"/>
+    <movie director="Майкл Манн" genre="Криминал" movie_finalDate="2023-11-01" movie_inceptionDate="2023-10-01"
+           name="Закон и порядок" year="2022"/>
+    <movie director="Пете Доктер" genre="Анимация" movie_finalDate="2024-04-01" movie_inceptionDate="2024-02-01"
+           name="Приключения в долине" year="2024"/>
+    <movie director="Кеннет Брана" genre="Семейный" movie_finalDate="2024-02-01" movie_inceptionDate="2023-11-01"
+           name="Сказочные моменты" year="2023"/>
+    <movie director="Квентин Тарантино" genre="Исторический" movie_finalDate="2023-12-01"
+           movie_inceptionDate="2023-10-01" name="Эпоха перемен" year="2022"/>
+</movies>

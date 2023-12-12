@@ -7,6 +7,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
+/**
+ * This is class for Object-Relational Mapping when we use Hibernate. It's equals to session table in SQL table
+ * @see DataBaseHandler
+ */
 @Entity
 @Table(name = "sessions")
 public class Session {

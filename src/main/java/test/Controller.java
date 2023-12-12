@@ -1,6 +1,9 @@
 package test;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,11 +20,11 @@ import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import tornadofx.control.DateTimePicker;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,17 +37,22 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
-import static java.lang.String.valueOf;
+import javafx.scene.control.TableColumn;
+
+import static java.lang.Boolean.valueOf;
 import static test.DataBaseHandler.getDataFromDB;
 
 /**
- * @author Max
  * This is class for working with stage
+ * @author Max
+ *
  */
 public class Controller {
     /**
@@ -114,7 +122,9 @@ public class Controller {
     @FXML
     private TableColumn<Movie,String> movieInceptionDateColumn;
     @FXML
-    private TableColumn<Movie,String> movieId;
+    private TableColumn<Movie, Number> lineNumberColumn;
+    @FXML
+    private TableColumn<Movie,String> movieIdColumn;
     @FXML
     private Button updateListButton;
     private Stage primaryStage;
@@ -134,7 +144,7 @@ public class Controller {
         updateListButton.setOnAction(event -> showByMonth());
         movieChoiceButton.setItems(month);
         logger.info("FXML file was loaded by initialize method");
-        searchMovieButton.setOnAction(event -> searchMovieBut());
+        searchMovieButton.setOnAction(event -> showSearchedMovies());
         addMovieButton.setOnAction(actionEvent -> addMovieWindow());
         movieListButton.setOnAction(actionEvent -> showMovieList(data));
         reportButton.setOnAction(actionEvent -> {
@@ -177,7 +187,7 @@ public class Controller {
         }
     });
 
-    searchMovieButton.setOnAction(event -> searchMovieBut());
+    searchMovieButton.setOnAction(event -> showSearchedMovies());
 
     movieTableView.setOnMousePressed(event -> {
         if (event.isPrimaryButtonDown() && event.getClickCount()==2){
@@ -359,23 +369,26 @@ public class Controller {
         Scene scene = new Scene(gridPane, 300, 300);
 
         // Create labels and text fields for each form
-        Label nameLabel = new Label("Name:");
+        Label nameLabel = new Label("Название:");
         TextField nameTextField = new TextField();
 
-        Label yearLabel = new Label("Year of Creation:");
+        Label yearLabel = new Label("Год создания:");
         TextField yearTextField = new TextField();
 
-        Label genreLabel = new Label("Genre:");
+        Label genreLabel = new Label("Жанр");
         TextField genreTextField = new TextField();
 
-        Label directorLabel = new Label("Director:");
+        Label directorLabel = new Label("Режиссёр");
         TextField placeTextField = new TextField();
 
         Label beginLabel = new Label("Начальная дата:");
-        DateTimePicker beginDatePicker = new DateTimePicker();
+        DatePicker beginDatePicker = new DatePicker();
 
         Label endLabel = new Label("Конечная дата:");
-        DateTimePicker endDatePicker = new DateTimePicker();
+        DatePicker endDatePicker = new DatePicker();
+
+        endDatePicker.setEditable(false);
+        beginDatePicker.setEditable(false);
 
         Button okButton = new Button("OK");
 
@@ -405,10 +418,10 @@ public class Controller {
 
         okButton.setOnAction(event -> {
             try {
-                movieName[0] = validateInput(nameTextField.getText(), "Name");
-                year[0] = validateInput(yearTextField.getText(), "Year of Creation");
-                genre[0] = validateInput(genreTextField.getText(), "Genre");
-                director[0] = validateInput(placeTextField.getText(), "Director");
+                movieName[0] = validateInput(nameTextField.getText(), "Название");
+                year[0] = validateInput(yearTextField.getText(), "Год создания");
+                genre[0] = validateInput(genreTextField.getText(), "Жанр");
+                director[0] = validateInput(placeTextField.getText(), "Режиссёр");
                 Movie mv  = new Movie();
                 mv.setMovieName(movieName[0]);
                 mv.setGenre(genre[0]);
@@ -422,14 +435,14 @@ public class Controller {
                 logger.info("Movie is created and added to DB");
             } catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Wrong number format");
+                alert.setTitle("Неправильный формат для числового поля");
                 alert.setHeaderText(null);
-                alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
+                alert.setContentText("Ошибка: " + nfe.getMessage().toLowerCase());
                 alert.showAndWait();
                 logger.warn(nfe.getMessage(),nfe);
             }catch (IllegalArgumentException iae) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Input error");
+                alert.setTitle("Ошибка ввода");
                 alert.setHeaderText(null);
                 alert.setContentText(iae.getMessage());
                 alert.showAndWait();
@@ -439,27 +452,26 @@ public class Controller {
 
 
         newStage.setScene(scene);
-        newStage.setTitle("Add Movie");
+        newStage.setTitle("Добавление фильма");
         newStage.show();
 
     }
 
 
     private void addSessionDialog(Movie movie, Stage primaryStage, ObservableList<Session> SessionsData, TableView<Session> sessionsTableView, int param) {
+        logger.info("open session dialog");
         Session session;
         if (param == 1) session = sessionsTableView.getSelectionModel().getSelectedItem();
         else {
             session = null;
         }
-
-
+        logger.info("get movie if it possible");
         Map<String, String> parameters = new HashMap<>();
         if (session != null) {
             parameters.put("countOfSold", session.getCountOfSold().toString());
             parameters.put("date", session.getSessionDate().toString());
             parameters.put("time", session.getSessionTime().toString());
         }
-
 
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -484,27 +496,28 @@ public class Controller {
         else {
             countOfSoldField = new TextField();
             dateOfSessionPicker = new DatePicker();
+            dateOfSessionPicker.setEditable(false);
             hourSpinner = new Spinner<>(8, 23, 0);
             minuteSpinner = new Spinner<>(0, 59, 0);
         }
         HBox timePicker = new HBox(3,  hourSpinner, new Label(":"), minuteSpinner);
 
-        dialogGrid.add(new Label("Количество проданных билетов:"), 0, 0);
+        dialogGrid.add(new Label("Кол-во проданных билетов"), 0, 0);
         dialogGrid.add(countOfSoldField, 1, 0);
-        dialogGrid.add(new Label("Дата сеанса:"), 0, 1);
+        dialogGrid.add(new Label("Дата сеанса"), 0, 1);
         dialogGrid.add(dateOfSessionPicker, 1, 1);
-        dialogGrid.add(new Label("Время сеанса:"), 0, 2);
+        dialogGrid.add(new Label("Время сеанса"), 0, 2);
         dialogGrid.add(timePicker, 1, 2);
 
-        Button addButton = new Button("Добавить");
+        Button addButton = new Button("Add");
 
         int selectedHour = hourSpinner.getValue();
         int selectedMinute = minuteSpinner.getValue();
         addButton.setOnAction(e -> {
             try {
-                validateInputSession(countOfSoldField.getText(), dateOfSessionPicker.getValue(), LocalTime.of(selectedHour, selectedMinute, 0).toString());
+                validateInputSession( dateOfSessionPicker.getValue(), LocalTime.of(selectedHour, selectedMinute, 0).toString());
                 if (session != null) {
-                    session.setCountOfSold(Integer.parseInt(validateInput(countOfSoldField.getText(), "Количесвто билетов")));
+                    session.setCountOfSold(Integer.parseInt(validateInput(countOfSoldField.getText(), "Кол-во проданных билетов")));
                     session.setSessionDate(dateOfSessionPicker.getValue());
                     session.setSessionTime(LocalTime.of(selectedHour, selectedMinute, 0));
                     Map<String, String> newValues = new HashMap<>();
@@ -512,8 +525,10 @@ public class Controller {
                     newValues.put("date",dateOfSessionPicker.getValue().toString());
                     newValues.put("time", LocalTime.of(selectedHour, selectedMinute, 0).toString());
                     DataBaseHandler.editDataSession(session.getSessionId(),newValues,"test_persistence");
+                    logger.info("added session and saved to DB");
                 }
                 else {
+                    validateInput(countOfSoldField.getText(), "Кол-во проданных билетов");
                     Session newSession = new Session();
                     newSession.setCountOfSold(Integer.parseInt(countOfSoldField.getText()));
                     newSession.setSessionDate(dateOfSessionPicker.getValue());
@@ -526,13 +541,13 @@ public class Controller {
                 dialogStage.close();
             }
             catch (IllegalArgumentException iae) {
-                AlertHandler.makeAlertWindow(Alert.AlertType.ERROR, "Error!", null, "Fill all the fields!");
+                AlertHandler.makeAlertWindow(Alert.AlertType.ERROR, "Ошибка!", null, "Заполните ввсе поля!");
                 logger.warn("Tried to add session, but some fields are empty");
             }catch (NumberFormatException nfe) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Wrong number format");
+                alert.setTitle("Неправильный формат для числового поля");
                 alert.setHeaderText(null);
-                alert.setContentText("Error: " + nfe.getMessage().toLowerCase());
+                alert.setContentText("Ошибка: " + nfe.getMessage().toLowerCase());
                 alert.showAndWait();
                 logger.warn(nfe.getMessage(),nfe);}
         });
@@ -547,6 +562,7 @@ public class Controller {
 
     private void showSessions (Movie movie, Stage parentStage)
     {
+        logger.info("showing sessions");
         dataS.clear();
         dataS.addAll(movie.getSessions());
 
@@ -559,11 +575,14 @@ public class Controller {
         Button addSessionButton = new Button("Добавить сеанс");
 
 
-
-
-        TableColumn<Session, Integer> idColumn = new TableColumn<Session,Integer>("Номер");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("sessionId"));
-        tableView.getColumns().add(idColumn);
+        TableColumn<Session, Integer> lineNumberColumn = new TableColumn<Session,Integer>("№");
+        lineNumberColumn.setCellValueFactory(param ->
+                Bindings.createIntegerBinding(() ->
+                                tableView.getItems().indexOf(param.getValue()) + 1,
+                        movieTableView.getItems()
+                ).asObject()
+        );
+        tableView.getColumns().add(lineNumberColumn);
 
         TableColumn<Session, String> dateColumn = new TableColumn<Session,String>("Дата сеанса");
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfSessionProperty());
@@ -573,16 +592,21 @@ public class Controller {
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeOfSessionProperty());
         tableView.getColumns().add(timeColumn);
 
-        TableColumn<Session, Integer> countColumn = new TableColumn<Session,Integer>("Количество проданных билетов");
+        TableColumn<Session, Integer> countColumn = new TableColumn<Session,Integer>("Кол-во проданных билетов");
         countColumn.setCellValueFactory(new PropertyValueFactory<>("countOfSold"));
         tableView.getColumns().add(countColumn);
         tableView.prefHeightProperty().bind(newStage.heightProperty());
         tableView.prefWidthProperty().bind(newStage.widthProperty());
 
-        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
-        dateColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
-        timeColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
-        countColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.25));
+        TableColumn<Session, Integer> idColumn = new TableColumn<Session,Integer>("Номер");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("sessionId"));
+        tableView.getColumns().add(idColumn);
+
+        lineNumberColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.07));
+        dateColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.22));
+        timeColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.22));
+        countColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.32));
+        idColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.18));
 
 
         GridPane gridPane = new GridPane();
@@ -595,7 +619,7 @@ public class Controller {
         newStage.setTitle("Список сеансов для " + movie.getMovieName());
         newStage.show();
 
-        String[] lables = {"Дата сеанса","Время сеанса","Количесвто проданных билетов(если есть)"};
+        String[] lables = {"Дата сеанса","Время сеанса","Кол-во проданных билетов"};
         List<String> lablesList = Arrays.asList(lables);
         addSessionButton.setOnAction(event -> addSessionDialog(movie, newStage,dataS,tableView , 0));
         tableView.setOnMousePressed(event -> {
@@ -606,9 +630,10 @@ public class Controller {
         });
     }
     private void showMovieList(ObservableList <Movie> movies){
-
+        logger.info("showing movies");
         movieTableView.setItems(movies);
-        movieId.setCellValueFactory(new PropertyValueFactory<>("movieId"));
+        lineNumberColumn.setCellValueFactory(param -> new SimpleIntegerProperty(movieTableView.getItems().indexOf(param.getValue()) + 1));
+        movieIdColumn.setCellValueFactory(new PropertyValueFactory<>("movieId"));
         movieNameColumn.setCellValueFactory(new PropertyValueFactory<>("movieName"));
         movieYearOfCreationColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         movieGenreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
@@ -618,41 +643,16 @@ public class Controller {
         logger.info("Movie List is shown");
     }
 
-    private void addWindow(List<String> lablesList){
-
-        Stage newStage = new Stage();
-        final String[] fieldValues= new String[lablesList.size()];
-        ArrayList<Label> lables = new ArrayList<Label>();
-        ArrayList<TextField> fields = new ArrayList<TextField>();
-
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(10));
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        Scene scene = new Scene(gridPane, 300, 200);
-
-        for (int i = 0; i < lablesList.size(); i++ ){
-            lables.add(new Label(lablesList.get(i)));
-            fields.add(new TextField());
-            gridPane.add(lables.get(i), 0, i);
-            gridPane.add(fields.get(i), 1, i);
-
-        }
-        Button okButton = new Button("OK");
-        gridPane.add(okButton,1,lablesList.size());
-
-        newStage.setScene(scene);
-        newStage.show();
-    }
 
 
     private void showReport() throws Exception {
         logger.info("Save and exit button");
         logger.info("Creating PFD report...");
-        new XMLtoPDFReporter().createReport("movies.XML");
+        new XMLtoPDFReporter().createReport("D:\\GAMES\\JetBrains\\cinema\\movies.xml");
     }
 
     public void importXML() throws ParserConfigurationException, IOException, SAXException {
+        logger.info("importing xml file");
         Stage chooseFileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open XML File");
@@ -717,13 +717,24 @@ public class Controller {
 
     }
 
-    private void searchMovieBut(){
+    private void showSearchedMovies(){
         ObservableList<Movie> movie_data = FXCollections.observableArrayList();
         movies = DataBaseHandler.getSearchedByNameMovies(movieNameField.getText());
         movie_data.addAll(movies);
-        showMovieList(movie_data);
+        try{
+            validateList(movie_data);
+            showMovieList(movie_data);
+            logger.info("show searched movies");
+        } catch (IllegalArgumentException e) {
+            AlertHandler.makeAlertWindow(Alert.AlertType.ERROR, "Ошибка!", null, "Фильмоы не найдены");
+            logger.error(e.getMessage(),e);
+        }
+
     }
+
+
     private void showByMonth() {
+        logger.info("showing movies by chosen month");
         ObservableList<Movie> movie_data = FXCollections.observableArrayList();
         String month = movieChoiceButton.getValue();
         List<Movie> filtredMovies = DataBaseHandler.getSearchedByMonthMovies(month);
@@ -731,31 +742,54 @@ public class Controller {
         showMovieList(movie_data);
     }
 
+    /**
+     * This is exception class for working with user inputs
+     */
     public static class IllegalArgumentException extends Exception {
 
         public IllegalArgumentException(String message) {
             super(message);
         }
     }
-    public static String validateInput(String input, String fieldName) throws IllegalArgumentException {
-        if (input.isEmpty()) {
-            throw new IllegalArgumentException("Field " + fieldName + " is empty. Try again.");
-        }
-        if (((fieldName.equals("Year of Creation") || fieldName.equals("Количесвто проданных билетов(если есть)"))&& !input.matches("-?\\d+(\\.\\d+)?"))) {
-            throw new NumberFormatException("Field " + fieldName + " should be an integer!");
-        }
-        return input;
-    }
-    private void validateInputMovie(String text, String text1, String text2, String text3) throws IllegalArgumentException {
-        if (text.isEmpty() || text1.isEmpty() || text2.isEmpty() || text3.isEmpty()) {
-            throw new IllegalArgumentException("Field is empty. Try again.");
+    public static void validateList(ObservableList<Movie> movie_data) throws IllegalArgumentException{
+        if (movie_data.isEmpty()){
+            throw new IllegalArgumentException("Список филмов пуст.");
         }
     }
 
-    private void validateInputSession(String text, LocalDate value,String value1) throws IllegalArgumentException {
-        if (text.isEmpty() || value== null || value1== null) {
-            throw new IllegalArgumentException("Field is empty. Try again.");
+    public static String validateInput(String input, String fieldName) throws IllegalArgumentException {
+        if (input.isEmpty()) {
+            throw new IllegalArgumentException("Поле " + fieldName + " пустое. Попробуйте ещё раз.");
+        }
+        if (((fieldName.equals("Год создания") || fieldName.equals("Кол-во проданных билетов"))&& !input.matches("-?\\d+(\\.\\d+)?"))) {
+
+            throw new NumberFormatException("Поле " + fieldName + " должно быть целочисленным");
+        }
+        if (((fieldName.equals("Год создания"))&& ( Integer.parseInt(input)<1850 || Integer.parseInt(input)>2027))) {
+            throw new NumberFormatException("Фильмов с таким годов выпуска не существует");
+        }
+        if ((fieldName.equals("Кол-во проданных билетов")&& Integer.parseInt(input)<0 )) {
+
+            throw new NumberFormatException("Количество не может быть отрицательным");
+        }
+
+        if (input.matches(".*[a-zA-Z].*")){
+            throw new IllegalArgumentException("Используйте только русский язык");
+        }
+        return input;
+    }
+    public void validateInputMovie(String text, String text1, String text2, String text3) throws IllegalArgumentException {
+        if (text.isEmpty() || text1.isEmpty() || text2.isEmpty() || text3.isEmpty()) {
+            throw new IllegalArgumentException("Пустое поле. Попробуйте ещё раз.");
         }
     }
+
+    public void validateInputSession( LocalDate value,String value1) throws IllegalArgumentException {
+        if ( value== null || value1== null) {
+            throw new IllegalArgumentException("Пустое поле. Попробуйте ещё раз.");
+        }
+    }
+
+
 }
 

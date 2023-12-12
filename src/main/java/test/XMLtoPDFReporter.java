@@ -9,6 +9,10 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+/**
+ * This is class for convert data to xml format and parsing xml data to DB
+ */
 public class XMLtoPDFReporter{
     private static final Logger logger = LogManager.getLogger("mainLogger");
     static String outputFilePath = "D:\\GAMES\\JetBrains\\cinema\\src\\main\\resources\\reports\\report.pdf";

@@ -7,6 +7,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This is class for Object-Relational Mapping when we use Hibernate. It's equals to movies table in SQL table
+ * @see DataBaseHandler
+ */
 @Entity
 @Table(name = "movies")
 public class Movie {

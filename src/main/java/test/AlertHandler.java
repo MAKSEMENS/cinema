@@ -4,18 +4,18 @@ import javafx.scene.control.ButtonType;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
+/**
+ * This is class for alert window
+ */
 public class AlertHandler {
     public static void makeAlertWindow(Alert.AlertType alertType,String title,String headerText,String contentText) {
-        if (alertType.equals(Alert.AlertType.INFORMATION)) {
             Alert alert = new Alert(alertType);
             alert.setTitle(title);
             alert.setHeaderText(headerText);
             alert.setContentText(contentText);
             alert.showAndWait();
-        }
-        else{
 
-        }
     }
     public static boolean makeConfAlertWindow(Alert.AlertType alertType,String title,String headerText,String contentText){
         AtomicBoolean k = new AtomicBoolean(false);
