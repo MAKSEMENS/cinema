@@ -3,7 +3,6 @@ package test;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
-import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.*;
@@ -37,12 +35,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.scene.control.TableColumn;
 
@@ -135,12 +132,48 @@ public class Controller {
             "Май", "Июнь", "Июль", "Август",
             "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
     private static final Logger logger = LogManager.getLogger("mainLogger");
+    public File xml =null;
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
     @FXML
     public void initialize(){
+        Thread exportXMLThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    exportXML(movies);
+                    logger.info("Export XML completed");
+                } catch (ParserConfigurationException | TransformerException | IOException e) {
+                    logger.error(e.getMessage());
+                }
+            }
+
+        });
+        Thread convertReportThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    showReport();
+                } catch (Exception ie ) {
+                    logger.error(ie.getMessage());
+                }
+            }
+        });
+        Thread importXMLThread  = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    importXML(xml);
+                } catch (ParserConfigurationException | SAXException | IOException e) {
+                    logger.error(e.getMessage(),e);
+                }
+            }
+        });
+        exportXMLThread.setName("EXPORT_XML-THREAD");
+        convertReportThread.setName("Convert_Report-Thread");
+        importXMLThread.setName("Import_XML-Thread");
         updateListButton.setOnAction(event -> showByMonth());
         movieChoiceButton.setItems(month);
         logger.info("FXML file was loaded by initialize method");
@@ -148,35 +181,38 @@ public class Controller {
         addMovieButton.setOnAction(actionEvent -> addMovieWindow());
         movieListButton.setOnAction(actionEvent -> showMovieList(data));
         reportButton.setOnAction(actionEvent -> {
+            convertReportThread.start();
             try {
-                showReport();
-            } catch (Exception e) {
+                convertReportThread.join();
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
 
         importXMLButton.setOnAction(event -> {
-        try {
-            importXML();
-            logger.info("Import XML completed");
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            logger.error(e.getMessage(),e);
-        }
-    });
+            try {
+                xml = makeFile();
+            } catch (ParserConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+            importXMLThread.start();
+
+
+        });
 
 
     exportXMLButton.setOnAction(event ->{
+        exportXMLThread.start();
         try {
-            exportXML(movies);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success!");
-            alert.setHeaderText(null);
-            alert.setContentText("XML file {groups.xml} successfully exported!");
-            alert.showAndWait();
-            logger.info("Export XML completed");
-        } catch (ParserConfigurationException | TransformerException | IOException e) {
-            logger.error(e.getMessage(),e);
+            exportXMLThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success!");
+        alert.setHeaderText(null);
+        alert.setContentText("XML file {groups.xml} successfully exported!");
+        alert.showAndWait();
     });
 
     saveExitButton.setOnAction(actionEvent -> {
@@ -651,15 +687,26 @@ public class Controller {
         new XMLtoPDFReporter().createReport("D:\\GAMES\\JetBrains\\cinema\\movies.xml");
     }
 
-    public void importXML() throws ParserConfigurationException, IOException, SAXException {
+    public File makeFile() throws ParserConfigurationException {
         logger.info("importing xml file");
         Stage chooseFileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open XML File");
         File xml = fileChooser.showOpenDialog(chooseFileStage);
+        Document document;
+        return xml;
+    }
+    public void importXML(File xml) throws ParserConfigurationException, IOException, SAXException {
 
+        Document document;
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = dBuilder.parse(xml);
+        if (xml!=null) {
+            document = dBuilder.parse(xml);
+        }
+        else{
+            logger.warn("Null file. End of importing");
+            return;
+        }
 
         document.getDocumentElement().normalize();
 
@@ -683,9 +730,10 @@ public class Controller {
             movie.setInceptionDate(LocalDate.parse(incDate,DateTimeFormatter.ISO_DATE));
             movie.setFinalDate(LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE));
             DataBaseHandler.saveMovieToDB(movie);
-            initialize();
+            logger.info("Movie is created and added to DB");
         }
-
+        initialize();
+        logger.info("Import XML completed");
 
         }
 

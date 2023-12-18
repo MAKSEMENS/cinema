@@ -1,5 +1,6 @@
 package test;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -16,6 +17,10 @@ import java.util.List;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+
+import static java.lang.Thread.currentThread;
 
 /**
  * This is class for working with DB using Hibernate
@@ -50,10 +55,11 @@ public class DataBaseHandler {
      * @param movie is movie for saving to DB
      */
     public static void saveMovieToDB (Movie movie){
+        CountDownLatch latch = new CountDownLatch(1);
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("test_persistence");
         EntityManager em = emf.createEntityManager();
 
-        logger.info("Saving new band to DataBase");
+        logger.info("Saving new movie to DataBase");
 
         em.getTransaction().begin();
 
@@ -61,11 +67,34 @@ public class DataBaseHandler {
         em.persist(movie);
         em.getTransaction().commit();
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success!");
-        alert.setHeaderText(null);
-        alert.setContentText("Фильм успешно добавлен, " + "Его номер " + movie.getMovieId());
-        alert.showAndWait();
+        if (!Objects.equals(currentThread().getName(), "JavaFX Application Thread")) {
+            Platform.runLater(() -> {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Фильм успешно добавлен, " + "Его номер " + movie.getMovieId());
+                    alert.showAndWait();
+                }catch (RuntimeException e ){
+                    logger.warn(e.getMessage());
+                }finally {
+                    latch.countDown();
+                }
+            });
+            try {
+                // Ждем завершения выполнения кода в runLater
+                latch.await();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText(null);
+            alert.setContentText("Фильм успешно добавлен, " + "Его номер " + movie.getMovieId());
+            alert.showAndWait();
+        }
     }
 
     /**
